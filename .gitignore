@@ -1,0 +1,7 @@
+*.ppm
+*.swp
+
+build/
+
+nobuild
+nobuild.old
