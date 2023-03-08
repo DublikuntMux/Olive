@@ -2,7 +2,7 @@
 #include "./nobuild.h"
 
 #define COMMON_CFLAGS                                                          \
-  "-Wall", "-Wextra", "-pedantic", "-std=c17", "-ggdb", "-I.", "-I./build/",   \
+  "-Wall", "-Wextra", "-pedantic", "-std=c17", "-I.", "-I./build/",            \
       "-I./dev-deps/", "-pipe", "-fno-semantic-interposition", "-flto"
 
 void build_tools(void) {
@@ -78,10 +78,10 @@ void copy_file(const char *src_file_path, const char *dst_file_path) {
 
 Pid build_wasm_demo(const char *name) {
   Cmd cmd = {.line = cstr_array_make(
-                 "clang", COMMON_CFLAGS, "-O3", "-fno-builtin",
-                 "--target=wasm32", "--no-standard-libraries", "-Wl,--no-entry",
-                 "-Wl,--export=vc_render", "-Wl,--export=__heap_base",
-                 "-Wl,--allow-undefined", "-o",
+                 "emcc", COMMON_CFLAGS, "-O3", "-sUSE_SDL=2", "-sFILESYSTEM=0",
+                 "--closure=1", "-fno-builtin", "-Wl,--no-entry",
+                 "--no-standard-libraries", "-Wl,--export=vc_render",
+                 "-Wl,--export=__heap_base", "-Wl,--allow-undefined", "-o",
                  CONCAT("./build/demos/", name, ".wasm"),
                  "-DVC_PLATFORM=VC_WASM_PLATFORM",
                  CONCAT("./demos/", name, ".c"), NULL)};
@@ -94,17 +94,17 @@ Pid build_term_demo(const char *name) {
                  "clang", COMMON_CFLAGS, "-O3", "-o",
                  CONCAT("./build/demos/", name, ".term"),
                  "-DVC_PLATFORM=VC_TERM_PLATFORM", "-D_XOPEN_SOURCE=600",
-                 CONCAT("./demos/", name, ".c"), "-lm", NULL)};
+                 "-fno-builtin", CONCAT("./demos/", name, ".c"), "-lm", NULL)};
   INFO("CMD: %s", cmd_show(cmd));
   return cmd_run_async(cmd, NULL, NULL);
 }
 
 Pid build_sdl_demo(const char *name) {
-  Cmd cmd = {.line = cstr_array_make("clang", COMMON_CFLAGS, "-O3", "-o",
-                                     CONCAT("./build/demos/", name, ".sdl"),
-                                     "-DVC_PLATFORM=VC_SDL_PLATFORM",
-                                     CONCAT("./demos/", name, ".c"), "-lm",
-                                     "-lSDL2", NULL)};
+  Cmd cmd = {.line = cstr_array_make(
+                 "clang", COMMON_CFLAGS, "-O3", "-o",
+                 CONCAT("./build/demos/", name, ".sdl"),
+                 "-DVC_PLATFORM=VC_SDL_PLATFORM", "-fno-builtin",
+                 CONCAT("./demos/", name, ".c"), "-lm", "-lSDL2", NULL)};
   INFO("CMD: %s", cmd_show(cmd));
   return cmd_run_async(cmd, NULL, NULL);
 }

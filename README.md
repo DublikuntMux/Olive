@@ -6,17 +6,13 @@
 
 **IMPORTANT! THIS LIBRARY IS A WORK IN PROGRESS! ANYTHING CAN CHANGE AT ANY MOMENT WITHOUT ANY NOTICE! USE THIS LIBRARY AT YOUR OWN RISK!**
 
-Simple graphics library that does not have any dependencies and renders everything into the given memory pixel by pixel.
+Simple graphics library that renders everything into the given memory pixel by pixel.
 
 Visit [https://tsoding.github.io/olive.c/](https://tsoding.github.io/olive.c/) to see some demos.
 
 The library is not concerned with displaying the image. It only fills up the memory with pixels. It's up to you what to do with those pixels.
 
 The name is pronounced as "olivets'" which is a Ukrainian word for "pencil" (["олівець"](https://translate.google.com/?sl=uk&tl=en&text=%D0%BE%D0%BB%D1%96%D0%B2%D0%B5%D1%86%D1%8C&op=translate)).
-
-The library itself does not require any special building. You can simply copy-paste [./olive.c](./olive.c) to your project and `#include` it. (Because the truly reusable code is the one that you can simply copy-paste).
-
-Olive.c is a classical [stb-style](https://github.com/nothings/stb) single header library. That is by default it acts like a header, but if you `#define OLIVEC_IMPLEMENTATION` prior including the library it acts like a source file. The `.c` extension might be confusing, but it's a part of the name of the library (why JavaScript people can use `.js` as part of the name of a library and I cannot?)
 
 ## Quick Example (Flag of Japan)
 
