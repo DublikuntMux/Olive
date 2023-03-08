@@ -1,4 +1,4 @@
-#include "vc.c"
+#include <vc.c>
 
 #include "./assets/Lena_112.c"
 

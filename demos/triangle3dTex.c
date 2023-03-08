@@ -1,4 +1,4 @@
-#include "vc.c"
+#include <vc.c>
 
 #include "./assets/lavastone.c"
 #include "./assets/oldstone.c"

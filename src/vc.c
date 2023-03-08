@@ -1,4 +1,4 @@
-// C implementation of the Virtual Console (VC) for demos.
+// C implementation of the Virtual Console (VC)
 //
 // # Usage
 // ```c
@@ -27,13 +27,13 @@
 // ```console
 // $ clang -o demo.sdl -DVC_PLATFORM=VC_SDL_PLATFORM demo.c -lSDL2
 // $ clang -o demo.term -DVC_PLATFORM=VC_TERM_PLATFORM demo.c
-// $ clang -fno-builtin --target=wasm32 --no-standard-libraries -Wl,--no-entry
+// $ emcc -fno-builtin --no-standard-libraries -Wl,--no-entry
+// -sUSE_SDL=2 -sLEGACY_GL_EMULATION
 // -Wl,--export=render -Wl,--allow-undefined -o demo.wasm
 // -DVC_PLATFORM=VC_WASM_PLATFORM demo.c
 // ```
 
-#define OLIVEC_IMPLEMENTATION
-#include <olive.c>
+#include "olive.c"
 
 Olivec_Canvas vc_render(float dt);
 

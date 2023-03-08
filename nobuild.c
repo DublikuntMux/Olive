@@ -2,15 +2,18 @@
 #include "./nobuild.h"
 
 #define COMMON_CFLAGS                                                          \
-  "-Wall", "-Wextra", "-pedantic", "-std=c17", "-I.", "-I./build/",            \
-      "-I./dev-deps/", "-pipe", "-fno-semantic-interposition", "-flto"
+  "-pipe", "-flto", "-Wall", "-Wextra", "-pedantic", "-std=c17", "-I./src/",   \
+      "-I./build/", "-I./thirdparty/"
 
 void build_tools(void) {
   MKDIRS("build", "tools");
-  CMD("clang", COMMON_CFLAGS, "-o", "./build/tools/png2c", "./tools/png2c.c",
-      "-lm");
-  CMD("clang", COMMON_CFLAGS, "-o", "./build/tools/obj2c", "./tools/obj2c.c",
-      "-lm");
+  CMD("clang", COMMON_CFLAGS, "-lm", "-o", "./build/tools/png2c",
+      "./tools/png2c.c");
+  CMD("clang", COMMON_CFLAGS, "-lm", "-o", "./build/tools/obj2c",
+      "./tools/obj2c.c");
+  CMD("clang", COMMON_CFLAGS, "-lm", "-I/usr/include/freetype2",
+      "-I/usr/include/libpng16", "-L/usr/local/lib", "-lfreetype", "-o",
+      "./build/tools/font2c", "./tools/font2c.c");
 }
 
 void build_assets(void) {
@@ -29,6 +32,8 @@ void build_assets(void) {
       "./assets/tsodinCupLowPoly.obj");
   CMD("./build/tools/obj2c", "-s", "0.40", "-o", "./build/assets/utahTeapot.c",
       "./assets/utahTeapot.obj");
+  CMD("./build/tools/font2c", "-o", "./build/assets/testFont.c", "-n",
+      "test_font", "./html/fonts/LibreBaskerville-Regular.ttf");
 }
 
 void build_tests(void) {
@@ -78,12 +83,12 @@ void copy_file(const char *src_file_path, const char *dst_file_path) {
 
 Pid build_wasm_demo(const char *name) {
   Cmd cmd = {.line = cstr_array_make(
-                 "emcc", COMMON_CFLAGS, "-O3", "-sUSE_SDL=2", "-sFILESYSTEM=0",
-                 "--closure=1", "-fno-builtin", "-Wl,--no-entry",
-                 "--no-standard-libraries", "-Wl,--export=vc_render",
-                 "-Wl,--export=__heap_base", "-Wl,--allow-undefined", "-o",
+                 "emcc", COMMON_CFLAGS, "-O3", "-fno-builtin", "-Wl,--no-entry",
+                 "-lm", "-sFILESYSTEM=0", "--closure=1", "-sUSE_SDL=2",
+                 "-sLEGACY_GL_EMULATION", "--no-standard-libraries",
+                 "-Wl,--export=vc_render", "-Wl,--export=__heap_base",
+                 "-DVC_PLATFORM=VC_WASM_PLATFORM", "-o",
                  CONCAT("./build/demos/", name, ".wasm"),
-                 "-DVC_PLATFORM=VC_WASM_PLATFORM",
                  CONCAT("./demos/", name, ".c"), NULL)};
   INFO("CMD: %s", cmd_show(cmd));
   return cmd_run_async(cmd, NULL, NULL);
@@ -91,20 +96,20 @@ Pid build_wasm_demo(const char *name) {
 
 Pid build_term_demo(const char *name) {
   Cmd cmd = {.line = cstr_array_make(
-                 "clang", COMMON_CFLAGS, "-O3", "-o",
+                 "clang", COMMON_CFLAGS, "-O3", "-fno-builtin", "-lm",
+                 "-DVC_PLATFORM=VC_TERM_PLATFORM", "-D_XOPEN_SOURCE=600", "-o",
                  CONCAT("./build/demos/", name, ".term"),
-                 "-DVC_PLATFORM=VC_TERM_PLATFORM", "-D_XOPEN_SOURCE=600",
-                 "-fno-builtin", CONCAT("./demos/", name, ".c"), "-lm", NULL)};
+                 CONCAT("./demos/", name, ".c"), NULL)};
   INFO("CMD: %s", cmd_show(cmd));
   return cmd_run_async(cmd, NULL, NULL);
 }
 
 Pid build_sdl_demo(const char *name) {
-  Cmd cmd = {.line = cstr_array_make(
-                 "clang", COMMON_CFLAGS, "-O3", "-o",
-                 CONCAT("./build/demos/", name, ".sdl"),
-                 "-DVC_PLATFORM=VC_SDL_PLATFORM", "-fno-builtin",
-                 CONCAT("./demos/", name, ".c"), "-lm", "-lSDL2", NULL)};
+  Cmd cmd = {.line = cstr_array_make("clang", COMMON_CFLAGS, "-O3",
+                                     "-fno-builtin", "-lm", "-lSDL2",
+                                     "-DVC_PLATFORM=VC_SDL_PLATFORM", "-o",
+                                     CONCAT("./build/demos/", name, ".sdl"),
+                                     CONCAT("./demos/", name, ".c"), NULL)};
   INFO("CMD: %s", cmd_show(cmd));
   return cmd_run_async(cmd, NULL, NULL);
 }

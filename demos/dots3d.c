@@ -1,4 +1,4 @@
-#include "vc.c"
+#include <vc.c>
 
 float sqrtf(float x);
 float atan2f(float y, float x);

@@ -7,6 +7,7 @@
 
 #include "./assets/tsodinCup.c"
 #include "./assets/tsodinPog.c"
+#include "./assets/testFont.c"
 
 #define PI 3.14159265359
 
@@ -57,8 +58,7 @@ static void *context_realloc(void *oldp, size_t oldsz, size_t newsz) {
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "./stb_image_write.h"
 
-#define OLIVEC_IMPLEMENTATION
-#include "olive.c"
+#include "olive.h"
 
 #define BACKGROUND_COLOR 0xFF202020
 #define FOREGROUND_COLOR 0xFF2020FF
@@ -395,6 +395,27 @@ Olivec_Canvas test_lines_example(void) {
   return oc;
 }
 
+Olivec_Canvas test_custom_font(void)
+{
+    size_t size = 1;
+
+    char *text = "the quick brown fox jumped over the lazy dog";
+    size_t text_len = strlen(text);
+    Olivec_Canvas oc = canvas_alloc(1000, 300);
+    olivec_fill(oc, BACKGROUND_COLOR);
+    olivec_text(oc, text, oc.width/2 - test_font.width*size*text_len/2, oc.height/4 - test_font.height*size/2, test_font, size, FOREGROUND_COLOR);
+
+    text = "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG";
+    text_len = strlen(text);
+    olivec_text(oc, text, oc.width/2 - test_font.width*size*text_len/2, oc.height/2 - test_font.height*size/2, test_font, size, FOREGROUND_COLOR);
+
+    text = "1234567890 !@#$%%&*(){}[]<>=\\|/,.;:?+-_";
+    text_len = strlen(text);
+    olivec_text(oc, text, oc.width/2 - test_font.width*size*text_len/2, 3 * oc.height/4 - test_font.height*size/2, test_font, size, FOREGROUND_COLOR);
+
+    return oc;
+}
+
 Olivec_Canvas test_hello_world_text_rendering(void) {
   size_t size = 5;
   const char *text = "hello, world";
@@ -646,6 +667,7 @@ Test_Case test_cases[] = {
     DEFINE_TEST_CASE(barycentric_overflow),
     DEFINE_TEST_CASE(bilinear_interpolation),
     DEFINE_TEST_CASE(fill_ellipse),
+    DEFINE_TEST_CASE(custom_font),
 };
 #define TEST_CASES_COUNT (sizeof(test_cases) / sizeof(test_cases[0]))
 

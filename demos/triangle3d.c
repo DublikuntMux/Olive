@@ -1,4 +1,4 @@
-#include "vc.c"
+#include <vc.c>
 
 #define WIDTH 960
 #define HEIGHT 720

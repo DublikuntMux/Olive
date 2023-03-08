@@ -186,7 +186,6 @@ int main(int argc, char **argv) {
   const char *input_file_path = NULL;
   float scale = 0.75;
 
-  // TODO: consider using https://github.com/tsoding/flag.h in here
   while (argc > 0) {
     const char *flag = shift(&argc, &argv);
     if (strcmp(flag, "-o") == 0) {

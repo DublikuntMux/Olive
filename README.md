@@ -20,7 +20,6 @@ _This example also uses [stb_image_write.h](https://raw.githubusercontent.com/no
 
 ```c
 // flag_jp.c
-#define OLIVEC_IMPLEMENTATION
 #include "olive.c"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
