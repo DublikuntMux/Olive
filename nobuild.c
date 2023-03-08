@@ -2,8 +2,8 @@
 #include "./nobuild.h"
 
 #define COMMON_CFLAGS                                                          \
-  "-Wall", "-Wextra", "-pedantic", "-std=c99", "-ggdb", "-I.", "-I./build/",   \
-      "-I./dev-deps/"
+  "-Wall", "-Wextra", "-pedantic", "-std=c17", "-ggdb", "-I.", "-I./build/",   \
+      "-I./dev-deps/", "-pipe", "-fno-semantic-interposition", "-flto"
 
 void build_tools(void) {
   MKDIRS("build", "tools");
@@ -11,9 +11,6 @@ void build_tools(void) {
       "-lm");
   CMD("clang", COMMON_CFLAGS, "-o", "./build/tools/obj2c", "./tools/obj2c.c",
       "-lm");
-  CMD("clang", COMMON_CFLAGS, "-I/usr/include/freetype2",
-      "-I/usr/include/libpng16", "-L/usr/local/lib", "-lfreetype", "-o",
-      "./build/tools/font2c", "./tools/font2c.c", "-lm");
 }
 
 void build_assets(void) {
@@ -32,8 +29,6 @@ void build_assets(void) {
       "./assets/tsodinCupLowPoly.obj");
   CMD("./build/tools/obj2c", "-s", "0.40", "-o", "./build/assets/utahTeapot.c",
       "./assets/utahTeapot.obj");
-  CMD("./build/tools/font2c", "-o", "./build/assets/testFont.c", "-n",
-      "test_font", "./fonts/LibreBaskerville-Regular.ttf");
 }
 
 void build_tests(void) {
@@ -83,7 +78,7 @@ void copy_file(const char *src_file_path, const char *dst_file_path) {
 
 Pid build_wasm_demo(const char *name) {
   Cmd cmd = {.line = cstr_array_make(
-                 "clang", COMMON_CFLAGS, "-O2", "-fno-builtin",
+                 "clang", COMMON_CFLAGS, "-O3", "-fno-builtin",
                  "--target=wasm32", "--no-standard-libraries", "-Wl,--no-entry",
                  "-Wl,--export=vc_render", "-Wl,--export=__heap_base",
                  "-Wl,--allow-undefined", "-o",
@@ -96,7 +91,7 @@ Pid build_wasm_demo(const char *name) {
 
 Pid build_term_demo(const char *name) {
   Cmd cmd = {.line = cstr_array_make(
-                 "clang", COMMON_CFLAGS, "-O2", "-o",
+                 "clang", COMMON_CFLAGS, "-O3", "-o",
                  CONCAT("./build/demos/", name, ".term"),
                  "-DVC_PLATFORM=VC_TERM_PLATFORM", "-D_XOPEN_SOURCE=600",
                  CONCAT("./demos/", name, ".c"), "-lm", NULL)};
@@ -105,7 +100,7 @@ Pid build_term_demo(const char *name) {
 }
 
 Pid build_sdl_demo(const char *name) {
-  Cmd cmd = {.line = cstr_array_make("clang", COMMON_CFLAGS, "-O2", "-o",
+  Cmd cmd = {.line = cstr_array_make("clang", COMMON_CFLAGS, "-O3", "-o",
                                      CONCAT("./build/demos/", name, ".sdl"),
                                      "-DVC_PLATFORM=VC_SDL_PLATFORM",
                                      CONCAT("./demos/", name, ".c"), "-lm",
@@ -174,7 +169,7 @@ void build_all_vc_demos(void) {
 
   for (size_t i = 0; i < names_sz; ++i) {
     copy_file(CONCAT("./build/demos/", names[i], ".wasm"),
-              CONCAT("./wasm/", names[i], ".wasm"));
+              CONCAT("./html/wasm/", names[i], ".wasm"));
   }
 }
 
@@ -229,7 +224,7 @@ int main(int argc, char **argv) {
           } else if (strcmp(platform, "wasm") == 0) {
             pid_wait(build_wasm_demo(name));
             copy_file(CONCAT("./build/demos/", name, ".wasm"),
-                      CONCAT("./wasm/", name, ".wasm"));
+                      CONCAT("./html/wasm/", name, ".wasm"));
           } else {
             PANIC("unknown demo platform %s", platform);
           }
@@ -238,7 +233,7 @@ int main(int argc, char **argv) {
           build_vc_demo(name, &pids);
           pids_wait(pids);
           copy_file(CONCAT("./build/demos/", name, ".wasm"),
-                    CONCAT("./wasm/", name, ".wasm"));
+                    CONCAT("./html/wasm/", name, ".wasm"));
         }
       } else {
         build_all_vc_demos();
