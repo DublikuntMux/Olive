@@ -1,4 +1,3 @@
-
 OLIVECDEF void olivec_rect(Olivec_Canvas oc, int x, int y, int w, int h,
                            uint32_t color) {
   Olivec_Normalized_Rect nr = {0};

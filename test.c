@@ -46,15 +46,9 @@ static void *context_realloc(void *oldp, size_t oldsz, size_t newsz) {
   return memcpy(context_alloc(newsz), oldp, oldsz);
 }
 
-#define STBI_MALLOC context_alloc
-#define STBI_FREE UNUSED
-#define STBI_REALLOC_SIZED context_realloc
 #define STB_IMAGE_IMPLEMENTATION
 #include "./stb_image.h"
 
-#define STBIW_MALLOC STBI_MALLOC
-#define STBIW_FREE STBI_FREE
-#define STBIW_REALLOC_SIZED STBI_REALLOC_SIZED
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "./stb_image_write.h"
 

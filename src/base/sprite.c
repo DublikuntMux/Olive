@@ -1,4 +1,3 @@
-
 OLIVECDEF void olivec_sprite_blend(Olivec_Canvas oc, int x, int y, int w, int h,
                                    Olivec_Canvas sprite) {
   if (sprite.width == 0)

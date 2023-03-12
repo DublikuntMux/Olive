@@ -1,21 +1,17 @@
+#include <math.h>
 #include <vc.c>
-
-float sqrtf(float x);
-float atan2f(float y, float x);
-float sinf(float x);
-float cosf(float x);
 
 #define PI 3.14159265359
 
 #define WIDTH 960
 #define HEIGHT 720
 #define BACKGROUND_COLOR 0xFF181818
-#define GRID_COUNT 10
+#define GRID_COUNT 20
 #define GRID_PAD 0.5 / GRID_COUNT
 #define GRID_SIZE ((GRID_COUNT - 1) * GRID_PAD)
 #define CIRCLE_RADIUS 5
 #define Z_START 0.25
-#define ABOBA_PADDING 50
+#define TEXT_PADDING 50
 
 static uint32_t pixels[WIDTH * HEIGHT];
 static float angle = 0;
@@ -64,12 +60,12 @@ Olivec_Canvas vc_render(float dt) {
 
   size_t size = 2;
   olivec_text(oc, "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG, 0123456789",
-              ABOBA_PADDING,
-              HEIGHT - ABOBA_PADDING - olivec_default_font.height * size,
+              TEXT_PADDING,
+              HEIGHT - TEXT_PADDING - olivec_default_font.height * size,
               olivec_default_font, size, 0xFFFFFFFF);
   olivec_text(oc, "the quick brown fox jumps over the lazy dog, !\"#$%&/()[]\\",
-              ABOBA_PADDING,
-              HEIGHT - ABOBA_PADDING + (olivec_default_font.height * size) * 2,
+              TEXT_PADDING,
+              HEIGHT - TEXT_PADDING + (olivec_default_font.height * size) * 2,
               olivec_default_font, size, 0xFFFFFFFF);
 
   return oc;

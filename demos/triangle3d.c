@@ -1,3 +1,4 @@
+#include <math.h>
 #include <vc.c>
 
 #define WIDTH 960
@@ -42,9 +43,6 @@ static Vector2 project_2d_scr(Vector2 v2) {
 static float global_time = 1.0;
 
 #define PI 3.14159265359
-
-float sinf(float);
-float cosf(float);
 
 Olivec_Canvas vc_render(float dt) {
   global_time += dt;

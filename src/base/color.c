@@ -1,4 +1,3 @@
-
 // TODO: custom pixel formats
 // Maybe we can store pixel format info in Olivec_Canvas
 #define OLIVEC_RED(color) (((color)&0x000000FF) >> (8 * 0))

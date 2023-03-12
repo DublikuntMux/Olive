@@ -1,11 +1,10 @@
+#include <math.h>
 #include <vc.c>
 
 #include "./assets/Lena_112.c"
 
 #define WIDTH 960
 #define HEIGHT 720
-
-float sinf(float);
 
 static uint32_t dst[WIDTH * HEIGHT];
 static float global_time = 0;

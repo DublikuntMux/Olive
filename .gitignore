@@ -1,7 +1,10 @@
 *.ppm
 *.swp
+__pycache__
 
 build/
+*.o
+.sconsign.dblite
 
 nobuild
 nobuild.old

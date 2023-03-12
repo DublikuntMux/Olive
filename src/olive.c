@@ -1,9 +1,9 @@
 #include "olive.h"
 
-#include "color.c"
-#include "figure.c"
-#include "sprite.c"
-#include "tringle.c"
+#include "base/color.c"
+#include "base/figure.c"
+#include "base/sprite.c"
+#include "base/tringle.c"
 
 OLIVECDEF Olivec_Canvas olivec_canvas(uint32_t *pixels, size_t width,
                                       size_t height, size_t stride) {

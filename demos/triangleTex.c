@@ -1,3 +1,4 @@
+#include <math.h>
 #include <vc.c>
 
 #include "assets/Lena_112.c"
@@ -8,11 +9,6 @@
 
 static uint32_t pixels[WIDTH * HEIGHT];
 static float triangle_angle = 0;
-
-float sqrtf(float x);
-float atan2f(float y, float x);
-float sinf(float x);
-float cosf(float x);
 
 #define PI 3.14159265359
 

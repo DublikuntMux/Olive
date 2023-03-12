@@ -1,4 +1,4 @@
-// Browser runtime for the Demo Virtual Console
+// Browser runtime for the Virtual Console
 function make_environment(...envs) {
     return new Proxy(envs, {
         get(target, prop, receiver) {

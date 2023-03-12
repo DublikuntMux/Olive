@@ -1,4 +1,3 @@
-
 OLIVECDEF bool olivec_normalize_triangle(size_t width, size_t height, int x1,
                                          int y1, int x2, int y2, int x3, int y3,
                                          int *lx, int *hx, int *ly, int *hy) {

@@ -1,14 +1,12 @@
 # Olive.c
 
 <p align="center">
-<a href="https://tsoding.github.io/olive.c/"><img src="./assets/olivec-200.png"></a>
+<img src="./assets/olivec-200.png"></a>
 </p>
 
 **IMPORTANT! THIS LIBRARY IS A WORK IN PROGRESS! ANYTHING CAN CHANGE AT ANY MOMENT WITHOUT ANY NOTICE! USE THIS LIBRARY AT YOUR OWN RISK!**
 
 Simple graphics library that renders everything into the given memory pixel by pixel.
-
-Visit [https://tsoding.github.io/olive.c/](https://tsoding.github.io/olive.c/) to see some demos.
 
 The library is not concerned with displaying the image. It only fills up the memory with pixels. It's up to you what to do with those pixels.
 

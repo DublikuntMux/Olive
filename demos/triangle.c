@@ -1,3 +1,4 @@
+#include <math.h>
 #include <vc.c>
 
 #define WIDTH 960
@@ -14,11 +15,6 @@ static float circle_x = WIDTH / 2;
 static float circle_y = HEIGHT / 2;
 static float circle_dx = 100;
 static float circle_dy = 100;
-
-float sqrtf(float x);
-float atan2f(float y, float x);
-float sinf(float x);
-float cosf(float x);
 
 #define PI 3.14159265359
 

@@ -251,7 +251,8 @@ int main(int argc, char **argv) {
   int lf = INT_MAX, hf = INT_MIN;
   for (size_t line_number = 0; content.count > 0; ++line_number) {
     String_View line = sv_trim_left(sv_chop_by_delim(&content, '\n'));
-    if (line.count > 0 && *line.data != '#') {
+    if (line.count > 0 && *line.data != '#' && *line.data != 's' &&
+        *line.data != 'o') {
       String_View kind = sv_chop_by_delim(&line, ' ');
       if (sv_eq(kind, SV("v"))) {
         char *endptr;
