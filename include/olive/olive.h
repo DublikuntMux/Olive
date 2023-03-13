@@ -25,7 +25,7 @@ typedef struct {
 } Olivec_Font;
 
 typedef struct {
-  uint32_t *pixels;
+    uint32_t *pixels;
   size_t width;
   size_t height;
   size_t stride;
@@ -39,14 +39,11 @@ typedef struct {
   int oy1, oy2;
 } Olivec_Normalized_Rect;
 
-#include "base/color.h"
-#include "base/figure.h"
-#include "base/sprite.h"
-#include "base/tringle.h"
 #include "font.h"
 
 #define OLIVEC_PIXEL(oc, x, y) (oc).pixels[(y) * (oc).stride + (x)]
-Olivec_Canvas olivec_canvas(uint32_t *pixels, size_t width, size_t height,
+
+Olivec_Canvas olivec_canvas(const uint32_t *pixels, size_t width, size_t height,
                             size_t stride);
 Olivec_Canvas olivec_subcanvas(Olivec_Canvas oc, int x, int y, int w, int h);
 bool olivec_barycentric(int x1, int y1, int x2, int y2, int x3, int y3, int xp,
@@ -54,7 +51,5 @@ bool olivec_barycentric(int x1, int y1, int x2, int y2, int x3, int y3, int xp,
 void olivec_text(Olivec_Canvas oc, const char *text, int tx, int ty,
                  Olivec_Font font, size_t glyph_size, uint32_t color);
 double olivec_binomial_coeffs(int n, int i);
-bool olivec_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
-                           size_t canvas_height, Olivec_Normalized_Rect *nr);
 
 #endif // OLIVE_H
