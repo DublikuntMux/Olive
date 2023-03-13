@@ -1,6 +1,8 @@
-#include <math.h>
+#include "./assets/Lena_112.h"
 #include "helpers/vc.c"
-#include "./assets/Lena_112.c"
+#include <olive/base/color.h>
+#include <olive/base/sprite.h>
+#include <math.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -19,7 +21,7 @@ Olivec_Canvas vc_render(float dt) {
 
   olivec_fill(dst_canvas, 0xFF181818);
 
-  int factor = 100;
+  float factor = 100.0f;
   int w = Lena_112_width * SRC_SCALE - t * factor;
   int h = Lena_112_height * SRC_SCALE + t * factor;
 

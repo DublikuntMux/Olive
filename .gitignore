@@ -1,4 +1,6 @@
-__pycache__
+__pycache__/
+.idea/
+.cache
 
 build/
 custom.py
@@ -6,5 +8,6 @@ custom.py
 *.so
 *.os
 .sconsign.dblite
+compile_commands.json
 
 html/wasm/*.wasm

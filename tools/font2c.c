@@ -1,9 +1,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
-#include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -100,8 +98,7 @@ int generate_c_file_from_ttf(const char *input_file_path,
   FT_Library library;
   FT_Face face;
 
-  int error = 0;
-
+  int error;
   error = FT_Init_FreeType(&library);
   if (error) {
     fprintf(stderr,

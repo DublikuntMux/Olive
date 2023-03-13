@@ -1,3 +1,4 @@
+#include "olive/math/vec.h"
 #include <errno.h>
 #include <float.h>
 #include <limits.h>
@@ -5,10 +6,10 @@
 #include <string.h>
 
 #define SV_IMPLEMENTATION
-#include "sv.h"
+#include <sv.h>
 
 #define ARENA_IMPLEMENTATION
-#include "arena.h"
+#include <arena.h>
 
 #define return_defer(value)                                                    \
   do {                                                                         \
@@ -16,7 +17,6 @@
     goto defer;                                                                \
   } while (0)
 typedef int Errno;
-#define UNUSED(x) (void)(x)
 
 const char *shift(int *argc, char ***argv) {
   assert(*argc > 0);
@@ -72,30 +72,7 @@ defer:
 }
 
 typedef struct {
-  float x, y;
-} Vector2;
-
-Vector2 make_vector2(float x, float y) {
-  Vector2 v2;
-  v2.x = x;
-  v2.y = y;
-  return v2;
-}
-
-typedef struct {
-  float x, y, z;
-} Vector3;
-
-Vector3 make_vector3(float x, float y, float z) {
-  Vector3 v3;
-  v3.x = x;
-  v3.y = y;
-  v3.z = z;
-  return v3;
-}
-
-typedef struct {
-  Vector3 *items;
+  vec3 *items;
   size_t capacity;
   size_t count;
 } Vertices;
@@ -139,13 +116,15 @@ typedef struct {
   } while (0)
 
 void generate_code(FILE *out, Vertices vertices, Faces faces) {
-  fprintf(out, "#ifndef OBJ_H_\n");
-  fprintf(out, "#define OBJ_H_\n");
+  fprintf(out, "#ifndef OBJ_H\n");
+  fprintf(out, "#define OBJ_H\n");
+  fprintf(out, "\n");
   fprintf(out, "#define vertices_count %zu\n", vertices.count);
+  fprintf(out, "\n");
   fprintf(out, "static const float vertices[][3] = {\n");
   for (size_t i = 0; i < vertices.count; ++i) {
-    Vector3 v = vertices.items[i];
-    fprintf(out, "    {%f, %f, %f},\n", v.x, v.y, v.z);
+    vec3 v = vertices.items[i];
+    fprintf(out, "    {%ff, %ff, %ff},\n", v.x, v.y, v.z);
   }
   fprintf(out, "};\n");
 
@@ -155,12 +134,14 @@ void generate_code(FILE *out, Vertices vertices, Faces faces) {
     fprintf(out, "    {%d, %d, %d},\n", f.a, f.b, f.c);
   }
   fprintf(out, "};\n");
+  fprintf(out, "\n");
   fprintf(out, "#define faces_count %zu\n", faces.count);
-  fprintf(out, "#endif // OBJ_H_\n");
+  fprintf(out, "\n");
+  fprintf(out, "#endif // OBJ_H\n");
 }
 
-Vector3 remap_object(Vector3 v, float scale, float lx, float hx, float ly,
-                     float hy, float lz, float hz) {
+vec3 remap_object(vec3 v, float scale, float lx, float hx, float ly, float hy,
+                  float lz, float hz) {
   float cx = lx + (hx - lx) / 2;
   float cy = ly + (hy - ly) / 2;
   float cz = lz + (hz - lz) / 2;
@@ -184,7 +165,7 @@ int main(int argc, char **argv) {
   const char *program_name = shift(&argc, &argv);
   const char *output_file_path = NULL;
   const char *input_file_path = NULL;
-  float scale = 0.75;
+  float scale = 0.75f;
 
   while (argc > 0) {
     const char *flag = shift(&argc, &argv);
@@ -281,7 +262,7 @@ int main(int argc, char **argv) {
         if (hz < z)
           hz = z;
 
-        da_append(&vertices, make_vector3(x, y, z));
+        da_append(&vertices, make_vec3(x, y, z));
       } else if (sv_eq(kind, SV("f"))) {
         char *endptr;
 

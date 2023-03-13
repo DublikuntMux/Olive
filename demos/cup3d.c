@@ -1,2 +1,2 @@
-#include "assets/tsodinCupLowPoly.c"
+#include "assets/tsodinCupLowPoly.h"
 #include "helpers/model3d.c"

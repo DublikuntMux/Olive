@@ -1,6 +1,7 @@
 #include "vc.c"
-#include <math.h>
-#include <math/vec.h>
+#include <olive/base/tringle.h>
+#include <olive/base/color.h>
+#include <olive/math/vec.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -17,7 +18,7 @@ static vec2 project_2d_scr(vec2 v2) {
 }
 
 Olivec_Canvas vc_render(float dt) {
-  angle += 0.25 * PI * dt;
+  angle += 0.25f * PI * dt;
 
   Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
   olivec_fill(oc, BACKGROUND_COLOR);
@@ -34,9 +35,9 @@ Olivec_Canvas vc_render(float dt) {
         make_vec3(vertices[b][0], vertices[b][1], vertices[b][2]), angle);
     vec3 v3 = vec3_rotate_y(
         make_vec3(vertices[c][0], vertices[c][1], vertices[c][2]), angle);
-    v1.z += 1.5;
-    v2.z += 1.5;
-    v3.z += 1.5;
+    v1.z += 1.5f;
+    v2.z += 1.5f;
+    v3.z += 1.5f;
     vec2 p1 = project_2d_scr(project_3d_2d(v1));
     vec2 p2 = project_2d_scr(project_3d_2d(v2));
     vec2 p3 = project_2d_scr(project_3d_2d(v3));
@@ -68,7 +69,7 @@ Olivec_Canvas vc_render(float dt) {
 
               z = 1.0f / z;
               if (z >= 1.0) {
-                z -= 1.0;
+                z -= 1.0f;
                 uint32_t v = z * 255;
                 if (v > 255)
                   v = 255;

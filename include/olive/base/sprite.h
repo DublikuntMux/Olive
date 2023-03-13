@@ -1,7 +1,7 @@
 #ifndef OLIVE_SPRITE_H
 #define OLIVE_SPRITE_H
 
-#include "../olive.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 void olivec_sprite_blend(Olivec_Canvas oc, int x, int y, int w, int h,

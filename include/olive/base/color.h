@@ -1,7 +1,7 @@
 #ifndef OLIVE_COLOR_H
 #define OLIVE_COLOR_H
 
-#include "../olive.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 // TODO: custom pixel formats

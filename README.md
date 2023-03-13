@@ -1,7 +1,7 @@
 # Olive.c
 
 <p align="center">
-<img src="./assets/olivec-200.png"></a>
+<img src="./assets/olivec-200.png">
 </p>
 
 **IMPORTANT! THIS LIBRARY IS A WORK IN PROGRESS! ANYTHING CAN CHANGE AT ANY MOMENT WITHOUT ANY NOTICE! USE THIS LIBRARY AT YOUR OWN RISK!**
@@ -46,11 +46,22 @@ int main(void)
 
 ## Building the Tests and Demos
 
-Even though the library does not require any special building, the tests and demos do. We use [nobuild](https://github.com/tsoding/nobuild) build system:
+For build use SCons build system
 
 ```console
-clang -o nobuild nobuild.c
-./nobuild
+// before all build tools for copiling and run it
+scons clang=True lto=True optimize=speed target=tools
+scons target=prepare
+
+// for sdl demos
+scons clang=True lto=True optimize=speed target=native_sdl
+// for terminal demos
+scons clang=True lto=True optimize=speed target=native_term
+// for web demos
+scons clang=True lto=True optimize=speed target=web
+
+// for building tests
+scons lto=True target=tests
 ```
 
 ## Tests
@@ -104,7 +115,7 @@ iexplore.exe http://localhost:6969/
 
 The support for several platforms is provided by Demo Virtual Console. It is implemented in two files:
 
-- [./demos/vc.c](./demos/vc.c) -- the C runtime required by all platforms.
-- [./js/vc.js](./js/vc.js) -- the JavaScript runtime for running in a browser when compiled to WebAssembly.
+- [./demos/helpers/vc.c](./demos/helpers/vc.c) -- the C runtime required by all platforms.
+- [./html/js/vc.js](./html/js/vc.js) -- the JavaScript runtime for running in a browser when compiled to WebAssembly.
 
 The Demo Virtual Console is not part of the main library and is designed specifically for demos. (I do consider including it into the main library, 'cause it looks pretty useful. The library is still in development).

@@ -1,7 +1,7 @@
 #ifndef OLIVE_TRINGLE_H
 #define OLIVE_TRINGLE_H
 
-#include "../olive.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 bool olivec_normalize_triangle(size_t width, size_t height, int x1, int y1,

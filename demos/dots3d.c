@@ -1,5 +1,7 @@
-#include <math.h>
 #include "helpers/vc.c"
+#include <olive/base/figure.h>
+#include <olive/base/color.h>
+#include <math.h>
 
 #define PI 3.14159265359
 
@@ -7,7 +9,7 @@
 #define HEIGHT 720
 #define BACKGROUND_COLOR 0xFF181818
 #define GRID_COUNT 20
-#define GRID_PAD 0.5 / GRID_COUNT
+#define GRID_PAD (0.5 / GRID_COUNT)
 #define GRID_SIZE ((GRID_COUNT - 1) * GRID_PAD)
 #define CIRCLE_RADIUS 5
 #define Z_START 0.25
@@ -17,7 +19,7 @@ static uint32_t pixels[WIDTH * HEIGHT];
 static float angle = 0;
 
 Olivec_Canvas vc_render(float dt) {
-  angle += 0.25 * PI * dt;
+  angle += 0.25f * PI * dt;
 
   Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
 
@@ -29,7 +31,7 @@ Olivec_Canvas vc_render(float dt) {
         float y = iy * GRID_PAD - GRID_SIZE / 2;
         float z = Z_START + iz * GRID_PAD;
 
-        float cx = 0.0;
+        float cx = 0.0f;
         float cz = Z_START + GRID_SIZE / 2;
 
         float dx = x - cx;

@@ -1,6 +1,8 @@
-#include <math.h>
+#include "assets/Lena_112.h"
 #include "helpers/vc.c"
-#include "assets/Lena_112.c"
+#include <olive/base/color.h>
+#include <olive/base/tringle.h>
+#include <math.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -29,10 +31,10 @@ Olivec_Canvas vc_render(float dt) {
         {1, 1},
         {0, 1},
     };
-    float len = WIDTH / 4;
+    float len = WIDTH / 4.0f;
     for (size_t i = 0; i < 4; ++i) {
-      ps[i][0] = WIDTH / 2 + cosf(PI / 2 * i + triangle_angle) * len;
-      ps[i][1] = HEIGHT / 2 + sinf(PI / 2 * i + triangle_angle) * len;
+      ps[i][0] = WIDTH / 2.0f + cosf(PI / 2 * i + triangle_angle) * len;
+      ps[i][1] = HEIGHT / 2.0f + sinf(PI / 2 * i + triangle_angle) * len;
     }
     for (size_t i = 0; i < 2; ++i) {
       int i1 = (i * 2 + 0) % 4;

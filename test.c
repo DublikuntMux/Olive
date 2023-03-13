@@ -2,12 +2,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-#include "./assets/testFont.c"
-#include "./assets/tsodinCup.c"
-#include "./assets/tsodinPog.c"
+#include "./assets/testFont.h"
+#include "./assets/tsodinCup.h"
+#include "./assets/tsodinPog.h"
 
 #define PI 3.14159265359
 
@@ -17,20 +16,9 @@
     goto defer;                                                                \
   } while (0)
 #define UNUSED(x) (void)(x)
-#define UNIMPLEMENTED(message)                                                 \
-  do {                                                                         \
-    fprintf(stderr, "%s:%d: UNIMPLEMENTED: %s\n", __FILE__, __LINE__,          \
-            message);                                                          \
-    exit(1);                                                                   \
-  } while (0)
-#define UNREACHABLE(message)                                                   \
-  do {                                                                         \
-    fprintf(stderr, "%s:%d: UNREACHABLE: %s\n", __FILE__, __LINE__, message);  \
-    exit(1);                                                                   \
-  } while (0)
 
 #define ARENA_IMPLEMENTATION
-#include "./arena.h"
+#include <arena.h>
 
 static Arena default_arena = {0};
 static Arena *context_arena = &default_arena;
@@ -47,12 +35,16 @@ static void *context_realloc(void *oldp, size_t oldsz, size_t newsz) {
 }
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "./stb_image.h"
+#include <stb_image.h>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "./stb_image_write.h"
+#include <stb_image_write.h>
 
-#include "olive.h"
+#include "olive/olive.h"
+#include "olive/base/color.h"
+#include "olive/base/figure.h"
+#include "olive/base/sprite.h"
+#include "olive/base/tringle.h"
 
 #define BACKGROUND_COLOR 0xFF202020
 #define FOREGROUND_COLOR 0xFF2020FF

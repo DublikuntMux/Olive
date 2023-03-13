@@ -1,7 +1,7 @@
 #ifndef OLIVE_FIGURE_H
 #define OLIVE_FIGURE_H
 
-#include "../olive.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 void olivec_rect(Olivec_Canvas oc, int x, int y, int w, int h, uint32_t color);

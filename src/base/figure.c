@@ -1,40 +1,51 @@
-#include <olive.h>
+#include "olive/base/figure.h"
+#include "olive/base/color.h"
+#include "olive/base/tringle.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 /**
-* @brief Draw a rectangle. This is equivalent to drawing a filled rectangle with the given color on the Olivec_Canvas.
-* @param oc The canvas to draw on. Must have been initialized.
-* @param x The x coordinate of the rectangle. This is in canvas coordinates.
-* @param y The y coordinate of the rectangle. This is in canvas coordinates.
-* @param w The width of the rectangle. This is in canvas coordinates.
-* @param h The height of the rectangle. This is in canvas coordinates.
-* @param color The color to draw the rectangle with. This is in pixel values
-*/
+ * @brief Draw a rectangle. This is equivalent to drawing a filled rectangle
+ * with the given color on the Olivec_Canvas.
+ * @param oc The canvas to draw on. Must have been initialized.
+ * @param x The x coordinate of the rectangle. This is in canvas coordinates.
+ * @param y The y coordinate of the rectangle. This is in canvas coordinates.
+ * @param w The width of the rectangle. This is in canvas coordinates.
+ * @param h The height of the rectangle. This is in canvas coordinates.
+ * @param color The color to draw the rectangle with. This is in pixel values
+ */
 void olivec_rect(Olivec_Canvas oc, int x, int y, int w, int h, uint32_t color) {
   Olivec_Normalized_Rect nr = {0};
   // Normalize rectangle to the nearest rectangle.
   if (!olivec_normalize_rect(x, y, w, h, oc.width, oc.height, &nr))
     return;
   // Draw the blending of the blending area
-  for (int x = nr.x1; x <= nr.x2; ++x) {
+  for (int i = nr.x1; i <= nr.x2; ++i) {
     // Draw the color of the blending area
-    for (int y = nr.y1; y <= nr.y2; ++y) {
-      olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), color);
+    for (int ii = nr.y1; ii <= nr.y2; ++ii) {
+      olivec_blend_color(&OLIVEC_PIXEL(oc, i, ii), color);
     }
   }
 }
 
 /**
-* @brief Normalize a rectangle to fit the canvas. This is useful for rendering rectangles that are in a different coordinate system than the one used to render the canvas.
-* @param x X coordinate of the rectangle to normalize. This is relative to the canvas
-* @param y Y coordinate of the rectangle to normalize. This is relative to the canvas
-* @param w Width of the rectangle to normalize. This is relative to the canvas
-* @param h Height of the rectangle to normalize. This is relative to the canvas
-* @param canvas_width Width of the canvas to normalize to. If 0 no scaling is done.
-* @param canvas_height Height of the canvas to normalize to. If 0 no scaling is done.
-* @param nr
-* @return True if the rectangle was normalized false otherwise. In this case \ a nr is modified in - place
-*/
+ * @brief Normalize a rectangle to fit the canvas. This is useful for rendering
+ * rectangles that are in a different coordinate system than the one used to
+ * render the canvas.
+ * @param x X coordinate of the rectangle to normalize. This is relative to the
+ * canvas
+ * @param y Y coordinate of the rectangle to normalize. This is relative to the
+ * canvas
+ * @param w Width of the rectangle to normalize. This is relative to the canvas
+ * @param h Height of the rectangle to normalize. This is relative to the canvas
+ * @param canvas_width Width of the canvas to normalize to. If 0 no scaling is
+ * done.
+ * @param canvas_height Height of the canvas to normalize to. If 0 no scaling is
+ * done.
+ * @param nr
+ * @return True if the rectangle was normalized false otherwise. In this case
+ * \ a nr is modified in - place
+ */
 bool olivec_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
                            size_t canvas_height, Olivec_Normalized_Rect *nr) {
   // No need to render empty rectangle
@@ -94,15 +105,17 @@ bool olivec_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
 }
 
 /**
-* @brief Draw a rectangular frame. This is the same as drawing a rectangle with center at ( x y ) and width and height w and height h.
-* @param oc The canvas to draw on. Must have Olivec_Canvas :: draw () called before.
-* @param x The x coordinate of the top left corner of the frame.
-* @param y The y coordinate of the top left corner of the frame.
-* @param w The width of the frame. If 0 nothing is drawn.
-* @param h The height of the frame. If 0 nothing is drawn.
-* @param t The time in milliseconds to draw the frame.
-* @param color The color of the frame in hexidecimal
-*/
+ * @brief Draw a rectangular frame. This is the same as drawing a rectangle with
+ * center at ( x y ) and width and height w and height h.
+ * @param oc The canvas to draw on. Must have Olivec_Canvas :: draw () called
+ * before.
+ * @param x The x coordinate of the top left corner of the frame.
+ * @param y The y coordinate of the top left corner of the frame.
+ * @param w The width of the frame. If 0 nothing is drawn.
+ * @param h The height of the frame. If 0 nothing is drawn.
+ * @param t The time in milliseconds to draw the frame.
+ * @param color The color of the frame in hexidecimal
+ */
 void olivec_frame(Olivec_Canvas oc, int x, int y, int w, int h, size_t t,
                   uint32_t color) {
   // If t is 0 return false.
@@ -132,14 +145,14 @@ void olivec_frame(Olivec_Canvas oc, int x, int y, int w, int h, size_t t,
 }
 
 /**
-* @brief Draw an ellipse. This is a helper function for olivec_draw_ellipse ().
-* @param oc The canvas to draw on. This must be initialized.
-* @param cx The x coordinate of the center of the ellipse.
-* @param cy The y coordinate of the center of the ellipse.
-* @param rx The x coordinate of the ellipse's center in the x direction.
-* @param ry The y coordinate of the ellipse's center in the y direction.
-* @param color The color of the ellipse in the color space
-*/
+ * @brief Draw an ellipse. This is a helper function for olivec_draw_ellipse ().
+ * @param oc The canvas to draw on. This must be initialized.
+ * @param cx The x coordinate of the center of the ellipse.
+ * @param cy The y coordinate of the center of the ellipse.
+ * @param rx The x coordinate of the ellipse's center in the x direction.
+ * @param ry The y coordinate of the ellipse's center in the y direction.
+ * @param color The color of the ellipse in the color space
+ */
 void olivec_ellipse(Olivec_Canvas oc, int cx, int cy, int rx, int ry,
                     uint32_t color) {
   Olivec_Normalized_Rect nr = {0};
@@ -167,13 +180,15 @@ void olivec_ellipse(Olivec_Canvas oc, int cx, int cy, int rx, int ry,
 }
 
 /**
-* @brief Draw a circle on the canvas. This is a convenience function for drawing circles that are very close to each other in the draw_circle function.
-* @param oc The canvas to draw on. Must have Olivec_Canvas initialized.
-* @param cx The x coordinate of the center of the circle.
-* @param cy The y coordinate of the center of the circle.
-* @param r The radius of the circle. It must be positive or negative.
-* @param color The color of the circle in hex format 0xRRGGBB
-*/
+ * @brief Draw a circle on the canvas. This is a convenience function for
+ * drawing circles that are very close to each other in the draw_circle
+ * function.
+ * @param oc The canvas to draw on. Must have Olivec_Canvas initialized.
+ * @param cx The x coordinate of the center of the circle.
+ * @param cy The y coordinate of the center of the circle.
+ * @param r The radius of the circle. It must be positive or negative.
+ * @param color The color of the circle in hex format 0xRRGGBB
+ */
 void olivec_circle(Olivec_Canvas oc, int cx, int cy, int r, uint32_t color) {
   Olivec_Normalized_Rect nr = {0};
   int r1 = r + OLIVEC_SIGN(int, r);
@@ -187,7 +202,8 @@ void olivec_circle(Olivec_Canvas oc, int cx, int cy, int r, uint32_t color) {
     // Draw the color of the blending area.
     for (int x = nr.x1; x <= nr.x2; ++x) {
       int count = 0;
-      // Find the number of times the probability of overflow is less than or equal to the probability of overflow.
+      // Find the number of times the probability of overflow is less than or
+      // equal to the probability of overflow.
       for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
         // Find the probability of overflow.
         for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
@@ -212,14 +228,15 @@ void olivec_circle(Olivec_Canvas oc, int cx, int cy, int r, uint32_t color) {
 // TODO: AA for line
 // TODO: lines with different thiccness
 /**
-* @brief Draw a line from x1 y1 to x2 y2. This is useful for drawing lines that don't have a bounding box.
-* @param oc The canvas to draw on. This is modified by this function
-* @param x1 The x coordinate of the start of the line.
-* @param y1 The y coordinate of the start of the line.
-* @param x2 The x coordinate of the end of the line.
-* @param y2 The y coordinate of the end of the line.
-* @param color The color of the line to draw ( 0xRRGGBBAA
-*/
+ * @brief Draw a line from x1 y1 to x2 y2. This is useful for drawing lines that
+ * don't have a bounding box.
+ * @param oc The canvas to draw on. This is modified by this function
+ * @param x1 The x coordinate of the start of the line.
+ * @param y1 The y coordinate of the start of the line.
+ * @param x2 The x coordinate of the end of the line.
+ * @param y2 The y coordinate of the end of the line.
+ * @param color The color of the line to draw ( 0xRRGGBBAA
+ */
 void olivec_line(Olivec_Canvas oc, int x1, int y1, int x2, int y2,
                  uint32_t color) {
   int dx = x2 - x1;
@@ -305,16 +322,17 @@ void olivec_line(Olivec_Canvas oc, int x1, int y1, int x2, int y2,
 
 // TODO: AA for triangle
 /**
-* @brief Draw a triangle. This is equivalent to drawing a barycentric triangular mesh on the Olivec_Canvas.
-* @param oc The canvas on which to draw the triangle.
-* @param x1 The x coordinate of the first point of the triangle.
-* @param y1 The y coordinate of the first point of the triangle.
-* @param x2 The x coordinate of the second point of the triangle.
-* @param y2 The y coordinate of the second point of the triangle.
-* @param x3 The x coordinate of the third point of the triangle.
-* @param y3 The y coordinate of the third point of the triangle.
-* @param color The color of the triangle in the format 0xRRGGBB
-*/
+ * @brief Draw a triangle. This is equivalent to drawing a barycentric
+ * triangular mesh on the Olivec_Canvas.
+ * @param oc The canvas on which to draw the triangle.
+ * @param x1 The x coordinate of the first point of the triangle.
+ * @param y1 The y coordinate of the first point of the triangle.
+ * @param x2 The x coordinate of the second point of the triangle.
+ * @param y2 The y coordinate of the second point of the triangle.
+ * @param x3 The x coordinate of the third point of the triangle.
+ * @param y3 The y coordinate of the third point of the triangle.
+ * @param color The color of the triangle in the format 0xRRGGBB
+ */
 void olivec_triangle(Olivec_Canvas oc, int x1, int y1, int x2, int y2, int x3,
                      int y3, uint32_t color) {
   int lx, hx, ly, hy;

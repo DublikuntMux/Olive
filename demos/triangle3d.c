@@ -1,5 +1,8 @@
-#include <math.h>
 #include "helpers/vc.c"
+#include <olive/base/color.h>
+#include <olive/base/tringle.h>
+#include <olive/math/vec.h>
+#include <math.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -9,38 +12,11 @@ static float zbuffer1[WIDTH * HEIGHT];
 static uint32_t pixels2[WIDTH * HEIGHT];
 static float zbuffer2[WIDTH * HEIGHT];
 
-typedef struct {
-  float x, y;
-} Vector2;
-
-Vector2 make_vector2(float x, float y) {
-  Vector2 v2;
-  v2.x = x;
-  v2.y = y;
-  return v2;
+static vec2 project_2d_scr(vec2 v2) {
+  return make_vec2((v2.x + 1) / 2 * WIDTH, (1 - (v2.y + 1) / 2) * HEIGHT);
 }
 
-typedef struct {
-  float x, y, z;
-} Vector3;
-
-static Vector3 make_vector3(float x, float y, float z) {
-  Vector3 v3;
-  v3.x = x;
-  v3.y = y;
-  v3.z = z;
-  return v3;
-}
-
-static Vector2 project_3d_2d(Vector3 v3) {
-  return make_vector2(v3.x / v3.z, v3.y / v3.z);
-}
-
-static Vector2 project_2d_scr(Vector2 v2) {
-  return make_vector2((v2.x + 1) / 2 * WIDTH, (1 - (v2.y + 1) / 2) * HEIGHT);
-}
-
-static float global_time = 1.0;
+static float global_time = 1.0f;
 
 #define PI 3.14159265359
 
@@ -52,18 +28,18 @@ Olivec_Canvas vc_render(float dt) {
   Olivec_Canvas zb1 = olivec_canvas((uint32_t *)zbuffer1, WIDTH, HEIGHT, WIDTH);
   olivec_fill(zb1, 0);
 
-  float z = 1.5;
-  float t = 0.75;
+  float z = 1.5f;
+  float t = 0.75f;
   {
-    Vector3 v1 =
-        make_vector3(cosf(global_time) * t, -t, z + sinf(global_time) * t);
-    Vector3 v2 = make_vector3(cosf(global_time + PI) * t, -t,
+    vec3 v1 =
+        make_vec3(cosf(global_time) * t, -t, z + sinf(global_time) * t);
+    vec3 v2 = make_vec3(cosf(global_time + PI) * t, -t,
                               z + sinf(global_time + PI) * t);
-    Vector3 v3 = make_vector3(0, t, z);
+    vec3 v3 = make_vec3(0, t, z);
 
-    Vector2 p1 = project_2d_scr(project_3d_2d(v1));
-    Vector2 p2 = project_2d_scr(project_3d_2d(v2));
-    Vector2 p3 = project_2d_scr(project_3d_2d(v3));
+    vec2 p1 = project_2d_scr(project_3d_2d(v1));
+    vec2 p2 = project_2d_scr(project_3d_2d(v2));
+    vec2 p3 = project_2d_scr(project_3d_2d(v3));
 
     olivec_triangle3z(zb1, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 1.0f / v1.z,
                       1.0f / v2.z, 1.0f / v3.z);
@@ -77,15 +53,15 @@ Olivec_Canvas vc_render(float dt) {
   olivec_fill(zb2, 0);
 
   {
-    Vector3 v1 = make_vector3(cosf(global_time + PI / 2) * t, -t,
+    vec3 v1 = make_vec3(cosf(global_time + PI / 2) * t, -t,
                               z + sinf(global_time + PI / 2) * t);
-    Vector3 v2 = make_vector3(cosf(global_time + PI + PI / 2) * t, -t,
+    vec3 v2 = make_vec3(cosf(global_time + PI + PI / 2) * t, -t,
                               z + sinf(global_time + PI + PI / 2) * t);
-    Vector3 v3 = make_vector3(0, t, z);
+    vec3 v3 = make_vec3(0, t, z);
 
-    Vector2 p1 = project_2d_scr(project_3d_2d(v1));
-    Vector2 p2 = project_2d_scr(project_3d_2d(v2));
-    Vector2 p3 = project_2d_scr(project_3d_2d(v3));
+    vec2 p1 = project_2d_scr(project_3d_2d(v1));
+    vec2 p2 = project_2d_scr(project_3d_2d(v2));
+    vec2 p3 = project_2d_scr(project_3d_2d(v3));
 
     olivec_triangle3z(zb2, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 1.0f / v1.z,
                       1.0f / v2.z, 1.0f / v3.z);
@@ -103,7 +79,7 @@ Olivec_Canvas vc_render(float dt) {
       }
       z1 = 1.0f / z1;
       if (z1 >= 1.0) {
-        z1 -= 1.0;
+        z1 -= 1.0f;
         uint32_t v = z1 * 255;
         if (v > 255)
           v = 255;

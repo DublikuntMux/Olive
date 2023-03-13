@@ -1,5 +1,8 @@
-#include <math.h>
 #include "helpers/vc.c"
+#include <olive/base/color.h>
+#include <olive/base/figure.h>
+#include <olive/base/tringle.h>
+#include <math.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -11,20 +14,20 @@
 
 static uint32_t pixels[WIDTH * HEIGHT];
 static float triangle_angle = 0;
-static float circle_x = WIDTH / 2;
-static float circle_y = HEIGHT / 2;
+static float circle_x = WIDTH / 2.0f;
+static float circle_y = HEIGHT / 2.0f;
 static float circle_dx = 100;
 static float circle_dy = 100;
 
 #define PI 3.14159265359
 
 static inline void rotate_point(float *x, float *y) {
-  float dx = *x - WIDTH / 2;
-  float dy = *y - HEIGHT / 2;
+  float dx = *x - WIDTH / 2.0f;
+  float dy = *y - HEIGHT / 2.0f;
   float mag = sqrtf(dx * dx + dy * dy);
   float dir = atan2f(dy, dx) + triangle_angle;
-  *x = cosf(dir) * mag + WIDTH / 2;
-  *y = sinf(dir) * mag + HEIGHT / 2;
+  *x = cosf(dir) * mag + WIDTH / 2.0f;
+  *y = sinf(dir) * mag + HEIGHT / 2.0f;
 }
 
 Olivec_Canvas vc_render(float dt) {
@@ -36,9 +39,9 @@ Olivec_Canvas vc_render(float dt) {
   {
     triangle_angle += 0.5f * PI * dt;
 
-    float x1 = WIDTH / 2, y1 = HEIGHT / 8;
-    float x2 = WIDTH / 8, y2 = HEIGHT / 2;
-    float x3 = WIDTH * 7 / 8, y3 = HEIGHT * 7 / 8;
+    float x1 = WIDTH / 2.0f, y1 = HEIGHT / 8.0f;
+    float x2 = WIDTH / 8.0f, y2 = HEIGHT / 2.0f;
+    float x3 = WIDTH * 7.0f / 8.0f, y3 = HEIGHT * 7.0f / 8.0f;
     rotate_point(&x1, &y1);
     rotate_point(&x2, &y2);
     rotate_point(&x3, &y3);

@@ -1,11 +1,14 @@
-#include <olive.h>
+#include "olive/base/color.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 /**
-* @brief Blend two colors using linear interpolation. This is useful for color blending where you don't know the alpha value of the color but want to make it a good color for your application
-* @param c1 pointer to the first color
-* @param c2 pointer to the second color ( must be normalized
-*/
+ * @brief Blend two colors using linear interpolation. This is useful for color
+ * blending where you don't know the alpha value of the color but want to make
+ * it a good color for your application
+ * @param c1 pointer to the first color
+ * @param c2 pointer to the second color ( must be normalized
+ */
 void olivec_blend_color(uint32_t *c1, uint32_t c2) {
   uint32_t r1 = OLIVEC_RED(*c1);
   uint32_t g1 = OLIVEC_GREEN(*c1);
@@ -34,14 +37,14 @@ void olivec_blend_color(uint32_t *c1, uint32_t c2) {
 }
 
 /**
-* @brief Fill the canvas with a color. This is equivalent to drawing a fill - around - the - edges pattern in Olivec.
-* @param oc The canvas to fill. Must have been initialized.
-* @param color The color to fill with. If you don't want to fill the entire canvas use 0
-*/
+ * @brief Fill the canvas with a color. This is equivalent to drawing a fill -
+ * around - the - edges pattern in Olivec.
+ * @param oc The canvas to fill. Must have been initialized.
+ * @param color The color to fill with. If you don't want to fill the entire
+ * canvas use 0
+ */
 void olivec_fill(Olivec_Canvas oc, uint32_t color) {
-  // Set the color of the OLIVEC.
   for (size_t y = 0; y < oc.height; ++y) {
-    // Set the color of the OLIVEC.
     for (size_t x = 0; x < oc.width; ++x) {
       OLIVEC_PIXEL(oc, x, y) = color;
     }
@@ -49,13 +52,16 @@ void olivec_fill(Olivec_Canvas oc, uint32_t color) {
 }
 
 /**
-* @brief Mix two colors using a factor u. This is similar to mix_colors but the determinant is used to determine how much of the colors are mixed.
-* @param c1 First color to be mixed. Must be in the range 0 - 255.
-* @param c2 Second color to be mixed. Must be in the range 0 - 255.
-* @param u1 Mixing factor for the first color.
-* @param det Detection factor for the second color. If 0 no determinant is used.
-* @return The result of the mixing. It is a 32 bit uint32_t but can be cast to uint32
-*/
+ * @brief Mix two colors using a factor u. This is similar to mix_colors but the
+ * determinant is used to determine how much of the colors are mixed.
+ * @param c1 First color to be mixed. Must be in the range 0 - 255.
+ * @param c2 Second color to be mixed. Must be in the range 0 - 255.
+ * @param u1 Mixing factor for the first color.
+ * @param det Detection factor for the second color. If 0 no determinant is
+ * used.
+ * @return The result of the mixing. It is a 32 bit uint32_t but can be cast to
+ * uint32
+ */
 uint32_t mix_colors2(uint32_t c1, uint32_t c2, int u1, int det) {
   // TODO: estimate how much overflows are an issue in integer only environment
   int64_t r1 = OLIVEC_RED(c1);
@@ -83,15 +89,23 @@ uint32_t mix_colors2(uint32_t c1, uint32_t c2, int u1, int det) {
 }
 
 /**
-* @brief Mix two colors using 3 different colors. This is similar to mix_colors but the colors are specified as uint32_t rather than uint32_t because of the need to convert them to int64_t before mixing
-* @param c1 First color to be mixed. Should be a 32 bit color. If it's 0 then we don't care about the alpha channel.
-* @param c2 Second color to be mixed. Should be a 32 bit color. If it's 0 then we don't care about the alpha channel.
-* @param c3 Third color to be mixed. Should be a 32 bit color. If it's 0 then we don't care about the alpha channel
-* @param u1 Red component of the first color to be mixed.
-* @param u2 Red component of the second color to be mixed.
-* @param det Detection factor for the colors. 0 = no detection 1 = determinant of colors.
-* @return A 32 bit color that is the result of mixing the colors specified by the arguments. If det is non - zero it will be used to determine the color of the first color
-*/
+ * @brief Mix two colors using 3 different colors. This is similar to mix_colors
+ * but the colors are specified as uint32_t rather than uint32_t because of the
+ * need to convert them to int64_t before mixing
+ * @param c1 First color to be mixed. Should be a 32 bit color. If it's 0 then
+ * we don't care about the alpha channel.
+ * @param c2 Second color to be mixed. Should be a 32 bit color. If it's 0 then
+ * we don't care about the alpha channel.
+ * @param c3 Third color to be mixed. Should be a 32 bit color. If it's 0 then
+ * we don't care about the alpha channel
+ * @param u1 Red component of the first color to be mixed.
+ * @param u2 Red component of the second color to be mixed.
+ * @param det Detection factor for the colors. 0 = no detection 1 = determinant
+ * of colors.
+ * @return A 32 bit color that is the result of mixing the colors specified by
+ * the arguments. If det is non - zero it will be used to determine the color of
+ * the first color
+ */
 uint32_t mix_colors3(uint32_t c1, uint32_t c2, uint32_t c3, int u1, int u2,
                      int det) {
   // TODO: estimate how much overflows are an issue in integer only environment

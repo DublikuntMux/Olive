@@ -1,22 +1,29 @@
-#include <olive.h>
+#include "olive/base/tringle.h"
+#include "olive/base/color.h"
+#include "olive/base/sprite.h"
+#include "olive/olive.h"
 #include <stdint.h>
 
 /**
-* @brief Normalize a triangle to a bounding box. This is useful for determining the size of a rectangle that is used to draw an image.
-* @param width The width of the image. This is the number of pixels in the image.
-* @param height The height of the image. This is the number of pixels in the image.
-* @param x1 The first corner of the upper left corner of the rectangle.
-* @param y1 The first corner of the upper left corner of the rectangle.
-* @param x2 The second corner of the upper right corner of the rectangle.
-* @param y2 The second corner of the upper right corner of the rectangle.
-* @param x3 The third corner of the upper right corner of the rectangle.
-* @param y3 The fourth corner of the upper right corner of the rectangle.
-* @param lx The x coordinate of the upper left corner of the rectangle.
-* @param hx The x coordinate of the lower left corner of the rectangle.
-* @param ly The y coordinate of the lower left corner of the rectangle.
-* @param hy The y coordinate of the lower left corner of the rectangle.
-* @return true on success false on failure. Note that the values of lx and hx may be out of bounds
-*/
+ * @brief Normalize a triangle to a bounding box. This is useful for determining
+ * the size of a rectangle that is used to draw an image.
+ * @param width The width of the image. This is the number of pixels in the
+ * image.
+ * @param height The height of the image. This is the number of pixels in the
+ * image.
+ * @param x1 The first corner of the upper left corner of the rectangle.
+ * @param y1 The first corner of the upper left corner of the rectangle.
+ * @param x2 The second corner of the upper right corner of the rectangle.
+ * @param y2 The second corner of the upper right corner of the rectangle.
+ * @param x3 The third corner of the upper right corner of the rectangle.
+ * @param y3 The fourth corner of the upper right corner of the rectangle.
+ * @param lx The x coordinate of the upper left corner of the rectangle.
+ * @param hx The x coordinate of the lower left corner of the rectangle.
+ * @param ly The y coordinate of the lower left corner of the rectangle.
+ * @param hy The y coordinate of the lower left corner of the rectangle.
+ * @return true on success false on failure. Note that the values of lx and hx
+ * may be out of bounds
+ */
 bool olivec_normalize_triangle(size_t width, size_t height, int x1, int y1,
                                int x2, int y2, int x3, int y3, int *lx, int *hx,
                                int *ly, int *hy) {
@@ -82,18 +89,21 @@ bool olivec_normalize_triangle(size_t width, size_t height, int x1, int y1,
 }
 
 /**
-* @brief Draw a triangle on the Olivec_Canvas. This is equivalent to drawing a barycentric triangle with the origin at ( x1 y1 ) and ( x2 y2 ) being the top left corner of the triangle.
-* @param oc The canvas to draw on. This must have been set prior to calling this function.
-* @param x1 The x coordinate of the first point of the triangle.
-* @param y1 The y coordinate of the first point of the triangle.
-* @param x2 The x coordinate of the second point of the triangle.
-* @param y2 The y coordinate of the second point of the triangle.
-* @param x3 The x coordinate of the third point of the triangle.
-* @param y3 The y coordinate of the third point of the triangle.
-* @param c1 The color to use for the first point.
-* @param c2 The color to use for the second point.
-* @param c3 The color to use for the third point
-*/
+ * @brief Draw a triangle on the Olivec_Canvas. This is equivalent to drawing a
+ * barycentric triangle with the origin at ( x1 y1 ) and ( x2 y2 ) being the top
+ * left corner of the triangle.
+ * @param oc The canvas to draw on. This must have been set prior to calling
+ * this function.
+ * @param x1 The x coordinate of the first point of the triangle.
+ * @param y1 The y coordinate of the first point of the triangle.
+ * @param x2 The x coordinate of the second point of the triangle.
+ * @param y2 The y coordinate of the second point of the triangle.
+ * @param x3 The x coordinate of the third point of the triangle.
+ * @param y3 The y coordinate of the third point of the triangle.
+ * @param c1 The color to use for the first point.
+ * @param c2 The color to use for the second point.
+ * @param c3 The color to use for the third point
+ */
 void olivec_triangle3c(Olivec_Canvas oc, int x1, int y1, int x2, int y2, int x3,
                        int y3, uint32_t c1, uint32_t c2, uint32_t c3) {
   int lx, hx, ly, hy;
@@ -115,18 +125,21 @@ void olivec_triangle3c(Olivec_Canvas oc, int x1, int y1, int x2, int y2, int x3,
 }
 
 /**
-* @brief Draw a triangle on the Olivec_Canvas. This is equivalent to the OpenGL glTriangle function but the coordinates are normalized to lie in the range [ 0 1 ]
-* @param oc The canvas to draw on.
-* @param x1 The x coordinate of the first vertex.
-* @param y1 The y coordinate of the first vertex.
-* @param x2 The x coordinate of the second vertex.
-* @param y2 The y coordinate of the second vertex.
-* @param x3 The x coordinate of the third vertex.
-* @param y3 The y coordinate of the third vertex.
-* @param z1 The z coordinate of the first vertex.
-* @param z2 The z coordinate of the second vertex.
-* @param z3 The z coordinate of the third vertex. Note that this will be ignored if the triangle is parallel
-*/
+ * @brief Draw a triangle on the Olivec_Canvas. This is equivalent to the OpenGL
+ * glTriangle function but the coordinates are normalized to lie in the range [
+ * 0 1 ]
+ * @param oc The canvas to draw on.
+ * @param x1 The x coordinate of the first vertex.
+ * @param y1 The y coordinate of the first vertex.
+ * @param x2 The x coordinate of the second vertex.
+ * @param y2 The y coordinate of the second vertex.
+ * @param x3 The x coordinate of the third vertex.
+ * @param y3 The y coordinate of the third vertex.
+ * @param z1 The z coordinate of the first vertex.
+ * @param z2 The z coordinate of the second vertex.
+ * @param z3 The z coordinate of the third vertex. Note that this will be
+ * ignored if the triangle is parallel
+ */
 void olivec_triangle3z(Olivec_Canvas oc, int x1, int y1, int x2, int y2, int x3,
                        int y3, float z1, float z2, float z3) {
   int lx, hx, ly, hy;
@@ -148,25 +161,27 @@ void olivec_triangle3z(Olivec_Canvas oc, int x1, int y1, int x2, int y2, int x3,
 }
 
 /**
-* @brief Draw a 3 - by - 3 UV triangular section. This is equivalent to the barycentric triangle but with the addition of texture coordinates.
-* @param oc The canvas to draw on. This is ignored if the function is called from outside.
-* @param x1 The x coordinate of the first vertex.
-* @param y1 The y coordinate of the first vertex.
-* @param x2 The x coordinate of the second vertex.
-* @param y2 The y coordinate of the second vertex.
-* @param x3 The x coordinate of the third vertex.
-* @param y3
-* @param tx1
-* @param ty1 The type of texture in the first vertex.
-* @param tx2 The type of texture in the second vertex.
-* @param ty2 The type of texture in the second vertex.
-* @param tx3 The type of texture in the third vertex.
-* @param ty3 The type of texture in the third vertex.
-* @param z1 The first vertex's z coordinate.
-* @param z2 The second vertex's z coordinate.
-* @param z3 The third vertex's z coordinate.
-* @param texture The texture to use for drawing the triangle
-*/
+ * @brief Draw a 3 - by - 3 UV triangular section. This is equivalent to the
+ * barycentric triangle but with the addition of texture coordinates.
+ * @param oc The canvas to draw on. This is ignored if the function is called
+ * from outside.
+ * @param x1 The x coordinate of the first vertex.
+ * @param y1 The y coordinate of the first vertex.
+ * @param x2 The x coordinate of the second vertex.
+ * @param y2 The y coordinate of the second vertex.
+ * @param x3 The x coordinate of the third vertex.
+ * @param y3
+ * @param tx1
+ * @param ty1 The type of texture in the first vertex.
+ * @param tx2 The type of texture in the second vertex.
+ * @param ty2 The type of texture in the second vertex.
+ * @param tx3 The type of texture in the third vertex.
+ * @param ty3 The type of texture in the third vertex.
+ * @param z1 The first vertex's z coordinate.
+ * @param z2 The second vertex's z coordinate.
+ * @param z3 The third vertex's z coordinate.
+ * @param texture The texture to use for drawing the triangle
+ */
 void olivec_triangle3uv(Olivec_Canvas oc, int x1, int y1, int x2, int y2,
                         int x3, int y3, float tx1, float ty1, float tx2,
                         float ty2, float tx3, float ty3, float z1, float z2,
@@ -211,25 +226,28 @@ void olivec_triangle3uv(Olivec_Canvas oc, int x1, int y1, int x2, int y2,
 }
 
 /**
-* @brief Draw a bilinear triangle on the Olivec_Canvas. The triangle is defined by the 3uv version of the triangle with the origin at ( x1 y1 ) and ( x2 y2 ) being the upper left corner of the triangle and the origin at ( x3 y3 ) being the lower right corner of the triangle.
-* @param oc The canvas to draw on. This is modified by this function.
-* @param x1 The x coordinate of the first vertex.
-* @param y1 The y coordinate of the first vertex.
-* @param x2 The x coordinate of the second vertex.
-* @param y2 The y coordinate of the second vertex.
-* @param x3 The x coordinate of the third vertex.
-* @param y3
-* @param tx1
-* @param ty1 The ty1 of the first vertex.
-* @param tx2 The tx2 of the second vertex.
-* @param ty2 The ty2 of the second vertex.
-* @param tx3 The tx3 of the second vertex.
-* @param ty3 The ty3 of the second vertex.
-* @param z1 The z coordinate of the first vertex.
-* @param z2 The z coordinate of the second vertex.
-* @param z3 The z coordinate of the third vertex.
-* @param texture The texture to use for drawing the triangle
-*/
+ * @brief Draw a bilinear triangle on the Olivec_Canvas. The triangle is defined
+ * by the 3uv version of the triangle with the origin at ( x1 y1 ) and ( x2 y2 )
+ * being the upper left corner of the triangle and the origin at ( x3 y3 ) being
+ * the lower right corner of the triangle.
+ * @param oc The canvas to draw on. This is modified by this function.
+ * @param x1 The x coordinate of the first vertex.
+ * @param y1 The y coordinate of the first vertex.
+ * @param x2 The x coordinate of the second vertex.
+ * @param y2 The y coordinate of the second vertex.
+ * @param x3 The x coordinate of the third vertex.
+ * @param y3
+ * @param tx1
+ * @param ty1 The ty1 of the first vertex.
+ * @param tx2 The tx2 of the second vertex.
+ * @param ty2 The ty2 of the second vertex.
+ * @param tx3 The tx3 of the second vertex.
+ * @param ty3 The ty3 of the second vertex.
+ * @param z1 The z coordinate of the first vertex.
+ * @param z2 The z coordinate of the second vertex.
+ * @param z3 The z coordinate of the third vertex.
+ * @param texture The texture to use for drawing the triangle
+ */
 void olivec_triangle3uv_bilinear(Olivec_Canvas oc, int x1, int y1, int x2,
                                  int y2, int x3, int y3, float tx1, float ty1,
                                  float tx2, float ty2, float tx3, float ty3,

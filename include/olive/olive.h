@@ -25,7 +25,7 @@ typedef struct {
 } Olivec_Font;
 
 typedef struct {
-    uint32_t *pixels;
+  uint32_t *pixels;
   size_t width;
   size_t height;
   size_t stride;

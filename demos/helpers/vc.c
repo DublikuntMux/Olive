@@ -33,7 +33,10 @@
 // -DVC_PLATFORM=VC_WASM_PLATFORM demo.c
 // ```
 
-#include <olive.h>
+#include "olive/olive.h"
+#ifdef OLIVE_MTHREAD_H
+#include <olive/mthread/mthread.h>
+#endif
 
 Olivec_Canvas vc_render(float dt);
 
@@ -75,7 +78,11 @@ static bool vc_sdl_resize_texture(SDL_Renderer *renderer, size_t new_width,
 }
 
 int main(void) {
-  int result = 0;
+  int result;
+
+#ifdef OLIVE_MTHREAD_H
+  mthread_init();
+#endif
 
   SDL_Window *window = NULL;
   SDL_Renderer *renderer = NULL;
@@ -154,13 +161,11 @@ int main(void) {
   }
 
 defer:
-  switch (result) {
-  case 0:
+  if (result == 0)
     printf("OK\n");
-    break;
-  default:
+  else
     fprintf(stderr, "SDL ERROR: %s\n", SDL_GetError());
-  }
+
   if (vc_sdl_texture)
     SDL_DestroyTexture(vc_sdl_texture);
   if (renderer)
@@ -173,13 +178,13 @@ defer:
 
 #elif VC_PLATFORM == VC_TERM_PLATFORM
 #include <assert.h>
-#include <errno.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <unistd.h>
+
+#include <olive/base/color.h>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -344,22 +349,20 @@ void rgb_to_hsl(int r, int g, int b, int *h, int *s, int *l) {
   if (b01 < cmin)
     cmin = b01;
   float delta = cmax - cmin;
-  float epsilon = 1e-6;
-  float hf = 0;
+  float epsilon = 1e-6f;
+  float hf;
   if (delta < epsilon)
     hf = 0;
   else if (cmax == r01)
-    hf = 60.0f * fmod((g01 - b01) / delta, 6.0f);
+    hf = 60.0f * fmodf((g01 - b01) / delta, 6.0f);
   else if (cmax == g01)
     hf = 60.0f * ((b01 - r01) / delta + 2);
-  else if (cmax == b01)
-    hf = 60.0f * ((r01 - g01) / delta + 4);
   else
-    assert(0 && "unreachable");
+    hf = 60.0f * ((r01 - g01) / delta + 4);
 
   float lf = (cmax + cmin) / 2;
 
-  float sf = 0;
+  float sf;
   if (delta < epsilon)
     sf = 0;
   else
