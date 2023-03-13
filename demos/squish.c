@@ -1,6 +1,5 @@
 #include <math.h>
-#include <vc.c>
-
+#include "helpers/vc.c"
 #include "./assets/Lena_112.c"
 
 #define WIDTH 960

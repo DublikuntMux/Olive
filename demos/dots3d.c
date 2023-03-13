@@ -1,5 +1,5 @@
 #include <math.h>
-#include <vc.c>
+#include "helpers/vc.c"
 
 #define PI 3.14159265359
 

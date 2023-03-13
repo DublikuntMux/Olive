@@ -1,10 +1,10 @@
-*.ppm
-*.swp
 __pycache__
 
 build/
+custom.py
 *.o
+*.so
+*.os
 .sconsign.dblite
 
-nobuild
-nobuild.old
+html/wasm/*.wasm

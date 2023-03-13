@@ -1,2 +1,2 @@
 #include "assets/utahTeapot.c"
-#include <model3d.c>
+#include "helpers/model3d.c"

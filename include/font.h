@@ -1,3 +1,6 @@
+#ifndef OLIVE_FONT_H
+#define OLIVE_FONT_H
+
 #define OLIVEC_DEFAULT_FONT_HEIGHT 6
 #define OLIVEC_DEFAULT_FONT_WIDTH 6
 
@@ -678,3 +681,5 @@ static Olivec_Font olivec_default_font = {
     .width = OLIVEC_DEFAULT_FONT_HEIGHT,
     .height = OLIVEC_DEFAULT_FONT_WIDTH,
 };
+
+#endif // OLIVE_FONT_H

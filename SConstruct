@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 from helpers import architectures, architecture_aliases, is_vanilla_clang, using_clang
 
 EnsureSConsVersion(3, 0, 0)
@@ -8,10 +9,10 @@ EnsurePythonVersion(3, 6)
 customs = ["custom.py"]
 opts = Variables(customs, ARGUMENTS)
 opts.Add(BoolVariable("lto", "Link-time optimization", False))
-opts.Add(EnumVariable("platform", "Target platform", "native_sdl",
+opts.Add(EnumVariable("target", "Target for build", "native_sdl",
                       ("linux_sdl", "windows_sdl", "native_sdl",
                        "linux_term", "windows_term", "native_term",
-                       "web", "tools")))
+                       "web", "tools", "tests")))
 opts.Add(EnumVariable("arch", "CPU architecture", "auto",
          ["auto"] + architectures, architecture_aliases))
 opts.Add(
@@ -22,12 +23,9 @@ opts.Add(
 )
 opts.Add(BoolVariable("clang", "Use clang", False))
 
-opts.Add(BoolVariable("tests", "Build tests", False))
-
 common_flags = ["-pipe", "-Wall", "-Wextra", "-pedantic"]
-
 env = Environment(CCFLAGS=common_flags, LINKFLAGS=common_flags,
-                  CPPPATH=['src', 'build', 'thirdparty'])
+                  CPPPATH=['src', 'build', 'thirdparty', 'include'])
 opts.Update(env)
 env.msvc = False
 
@@ -46,16 +44,19 @@ else:
     else:
         env.Append(LINKFLAGS=["-s"])
 
-    if env["optimize"] == "speed":
-        env.Append(CCFLAGS=["-O3"])
-    elif env["optimize"] == "speed_trace":
-        env.Append(CCFLAGS=["-O2"])
-    elif env["optimize"] == "size":
+    if env["target"] == "web":
         env.Append(CCFLAGS=["-Os"])
-    elif env["optimize"] == "debug":
-        env.Append(CCFLAGS=["-Og"])
-    elif env["optimize"] == "none":
-        env.Append(CCFLAGS=["-O0"])
+    else:
+        if env["optimize"] == "speed":
+            env.Append(CCFLAGS=["-O3"])
+        elif env["optimize"] == "speed_trace":
+            env.Append(CCFLAGS=["-O2"])
+        elif env["optimize"] == "size":
+            env.Append(CCFLAGS=["-Os"])
+        elif env["optimize"] == "debug":
+            env.Append(CCFLAGS=["-Og"])
+        elif env["optimize"] == "none":
+            env.Append(CCFLAGS=["-O0"])
 
 if not env.msvc:
     env.Prepend(CFLAGS=["-std=gnu11"])
@@ -83,7 +84,7 @@ if env["clang"]:
     }
     env.Replace(**clang_options)
 
-if env["platform"] == "web":
+if env["target"] == "web":
     emcc_options = {
         "CC": "emcc",
         "CXX": "em++",
@@ -96,14 +97,6 @@ if env["platform"] == "web":
 
 env_tool = env.Clone()
 env_app = env.Clone()
-
-if not env["platform"] == "web":
-    env_tool.Program(target='build/tools/png2c', source='tools/png2c.c',
-                     LINKFLAGS='$LINKFLAGS -lm')
-    env_tool.Program(target='build/tools/obj2c', source='tools/obj2c.c',
-                     LINKFLAGS='$LINKFLAGS -lm')
-    env_tool.Program(target='build/tools/font2c', source='tools/font2c.c', CCFLAGS='$CCFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16 -L/usr/local/lib',
-                     LINKFLAGS='$LINKFLAGS -lm -I/usr/include/freetype2 -I/usr/include/libpng16 -L/usr/local/lib -lfreetype')
 
 if not os.path.exists("build"):
     os.mkdir("build")
@@ -122,46 +115,110 @@ os.system(
     "./build/tools/obj2c -s 0.40 -o ./build/assets/utahTeapot.c ./assets/utahTeapot.obj")
 os.system("./build/tools/font2c -o ./build/assets/testFont.c -n test_font ./html/fonts/LibreBaskerville-Regular.ttf")
 
-if env["tests"]:
-    env_tool.Program(target='build/test', source='test.c',
-                     LINKFLAGS='$LINKFLAGS -lm -fsanitize=memory', CCFLAGS='$CCFLAGS -fsanitize=memory')
 
-suffix = "." + env["platform"]
-suffix += "." + env["arch"]
-
-env_app["OBJSUFFIX"] = suffix + env_app["OBJSUFFIX"]
-
-if os.name == "nt":
-    env_app["LIBSUFFIXES"] += [env_app["LIBSUFFIX"]]
-else:
-    env_app["LIBSUFFIXES"] += [env_app["LIBSUFFIX"], env_app["SHLIBSUFFIX"]]
-env_app["LIBSUFFIX"] = suffix + env_app["LIBSUFFIX"]
-env_app["SHLIBSUFFIX"] = suffix + env_app["SHLIBSUFFIX"]
-
-
-def get_files(path):
+def get_source(path):
     for file in os.listdir(path):
         if os.path.isfile(os.path.join(path, file)):
             if file.endswith('.c'):
                 yield file
 
 
-if not env["platform"] == "tools":
-    if env["platform"] == "native_sdl":
-        for file in get_files("demos"):
-            env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)),
-                            LINKFLAGS='$LINKFLAGS -lm -lSDL2', CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM')
+lib_src = []
+list_dir = ["src", "src/base", "src/math"]
 
-    elif env["platform"] == "native_term":
-        for file in get_files("demos"):
-            env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)),
-                            LINKFLAGS='$LINKFLAGS -lm', CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600')
+for dir in list_dir:
+    for file in get_source(dir):
+        lib_src.append(os.path.join(dir, file))
 
-    elif env["platform"] == "web":
-        os.environ["EMSCRIPTEN_ROOT"] = os.path.dirname(WhereIs("emcc"))
-        env_app.Tool("emscripten", toolpath=[os.path.dirname(
-            WhereIs("emcc")) + "/tools/scons/site_scons/site_tools/emscripten"])
-        for file in get_files("demos"):
-            env_app.Program(target='build/demos/' + file.replace('.c', '') + '.wasm', source=(os.path.join("demos", file)),
-                            LINKFLAGS='$LINKFLAGS -Wl,--no-entry -Wl,--export=vc_render -Wl,--export=__heap_base -lm -lSDL2 -sFILESYSTEM=0 -sUSE_SDL=2 -sMALLOC=emmalloc -sALLOW_MEMORY_GROWTH -sLEGACY_GL_EMULATION', CCFLAGS='$CCFLAGS -fno-builtin --closure=1 --no-standard-libraries -DVC_PLATFORM=VC_WASM_PLATFORM')
-            shutil.copyfile('build/demos/' + file.replace('.c', '') + '.wasm', 'html/wasm/' + file.replace('.c', '') + '.wasm')
+if not env["target"] == "web":
+    if os.path.exists("build/libs/libolive.so"):
+        os.remove("build/libs/libolive.so")
+    env_app.StaticLibrary(target='build/libs/olive', source=lib_src)
+else:
+    if os.path.exists("build/libs/libolive.a"):
+        os.remove("build/libs/libolive.a")
+    os.environ["EMSCRIPTEN_ROOT"] = os.path.dirname(WhereIs("emcc"))
+    env_app.Tool("emscripten", toolpath=[os.path.dirname(
+        WhereIs("emcc")) + "/tools/scons/site_scons/site_tools/emscripten"])
+    env_app.SharedLibrary(target='build/libs/olive',
+                          source=lib_src, LIBPATH='build/libs')
+
+if env["target"] == "tests":
+    env_tool.Program(target='build/test', source='test.c',
+                     LIBPATH='build/libs', LIBS=['m', 'olive'])
+
+elif env["target"] == "tools":
+    env_tool.Program(target='build/tools/png2c',
+                     source='tools/png2c.c', LIBS=['m'])
+    env_tool.Program(target='build/tools/obj2c',
+                     source='tools/obj2c.c', LIBS=['m'])
+    env_tool.Program(target='build/tools/font2c', source='tools/font2c.c', CCFLAGS='$CCFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16 -L/usr/local/lib',
+                     LINKFLAGS='$LINKFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16 -L/usr/local/lib', LIBS=['m', 'freetype'])
+
+elif env["target"] == "native_sdl":
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)),
+                        LIBPATH='build/libs', LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM')
+
+elif env["target"] == "linux_sdl":
+    host_is_64_bit = sys.maxsize > 2**32
+    if host_is_64_bit and env["arch"] == "x86_32":
+        env.Append(CCFLAGS=["-m32"])
+        env.Append(LINKFLAGS=["-m32", "-L/usr/lib/i386-linux-gnu"])
+    elif not host_is_64_bit and env["arch"] == "x86_64":
+        env.Append(CCFLAGS=["-m64"])
+        env.Append(LINKFLAGS=["-m64", "-L/usr/lib/i686-linux-gnu"])
+
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)),
+                        LIBPATH='build/libs', LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM')
+
+elif env["target"] == "windows_sdl":
+    msvc_arch_aliases = {"x86_32": "x86", "arm32": "arm"}
+    if env["arch"] in msvc_arch_aliases.keys():
+        env["TARGET_ARCH"] = msvc_arch_aliases[env["arch"]]
+    else:
+        env["TARGET_ARCH"] = env["arch"]
+
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)),
+                        LIBPATH='build/libs', LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM')
+
+elif env["target"] == "native_term":
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)),
+                        LIBPATH='build/libs', LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600')
+
+elif env["target"] == "linux_term":
+    host_is_64_bit = sys.maxsize > 2**32
+    if host_is_64_bit and env["arch"] == "x86_32":
+        env.Append(CCFLAGS=["-m32"])
+        env.Append(LINKFLAGS=["-m32", "-L/usr/lib/i386-linux-gnu"])
+    elif not host_is_64_bit and env["arch"] == "x86_64":
+        env.Append(CCFLAGS=["-m64"])
+        env.Append(LINKFLAGS=["-m64", "-L/usr/lib/i686-linux-gnu"])
+
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)),
+                        LIBPATH='build/libs', LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600')
+
+elif env["target"] == "windows_term":
+    msvc_arch_aliases = {"x86_32": "x86", "arm32": "arm"}
+    if env["arch"] in msvc_arch_aliases.keys():
+        env["TARGET_ARCH"] = msvc_arch_aliases[env["arch"]]
+    else:
+        env["TARGET_ARCH"] = env["arch"]
+
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)),
+                        LIBPATH='build/libs', LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600')
+
+elif env["target"] == "web":
+    os.environ["EMSCRIPTEN_ROOT"] = os.path.dirname(WhereIs("emcc"))
+    env_app.Tool("emscripten", toolpath=[os.path.dirname(
+        WhereIs("emcc")) + "/tools/scons/site_scons/site_tools/emscripten"])
+    for file in get_source("demos"):
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.wasm', source=(os.path.join("demos", file)), LIBPATH='build/libs', LIBS=[
+                        'm', 'SDL', 'olive'], LINKFLAGS='$LINKFLAGS -Wl,--no-entry -Wl,--export=vc_render -Wl,--export=__heap_base -sFILESYSTEM=0 -sUSE_SDL=2 -sMALLOC=emmalloc -sALLOW_MEMORY_GROWTH -sLEGACY_GL_EMULATION', CCFLAGS='$CCFLAGS -fno-builtin --closure=1 --no-standard-libraries -DVC_PLATFORM=VC_WASM_PLATFORM')
+        shutil.copyfile('build/demos/' + file.replace('.c', '') +
+                        '.wasm', 'html/wasm/' + file.replace('.c', '') + '.wasm')

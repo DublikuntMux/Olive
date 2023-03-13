@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "./assets/testFont.c"
 #include "./assets/tsodinCup.c"
 #include "./assets/tsodinPog.c"
-#include "./assets/testFont.c"
 
 #define PI 3.14159265359
 
@@ -389,25 +389,30 @@ Olivec_Canvas test_lines_example(void) {
   return oc;
 }
 
-Olivec_Canvas test_custom_font(void)
-{
-    size_t size = 1;
+Olivec_Canvas test_custom_font(void) {
+  size_t size = 1;
 
-    char *text = "the quick brown fox jumped over the lazy dog";
-    size_t text_len = strlen(text);
-    Olivec_Canvas oc = canvas_alloc(1000, 300);
-    olivec_fill(oc, BACKGROUND_COLOR);
-    olivec_text(oc, text, oc.width/2 - test_font.width*size*text_len/2, oc.height/4 - test_font.height*size/2, test_font, size, FOREGROUND_COLOR);
+  char *text = "the quick brown fox jumped over the lazy dog";
+  size_t text_len = strlen(text);
+  Olivec_Canvas oc = canvas_alloc(1000, 300);
+  olivec_fill(oc, BACKGROUND_COLOR);
+  olivec_text(oc, text, oc.width / 2 - test_font.width * size * text_len / 2,
+              oc.height / 4 - test_font.height * size / 2, test_font, size,
+              FOREGROUND_COLOR);
 
-    text = "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG";
-    text_len = strlen(text);
-    olivec_text(oc, text, oc.width/2 - test_font.width*size*text_len/2, oc.height/2 - test_font.height*size/2, test_font, size, FOREGROUND_COLOR);
+  text = "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG";
+  text_len = strlen(text);
+  olivec_text(oc, text, oc.width / 2 - test_font.width * size * text_len / 2,
+              oc.height / 2 - test_font.height * size / 2, test_font, size,
+              FOREGROUND_COLOR);
 
-    text = "1234567890 !@#$%%&*(){}[]<>=\\|/,.;:?+-_";
-    text_len = strlen(text);
-    olivec_text(oc, text, oc.width/2 - test_font.width*size*text_len/2, 3 * oc.height/4 - test_font.height*size/2, test_font, size, FOREGROUND_COLOR);
+  text = "1234567890 !@#$%%&*(){}[]<>=\\|/,.;:?+-_";
+  text_len = strlen(text);
+  olivec_text(oc, text, oc.width / 2 - test_font.width * size * text_len / 2,
+              3 * oc.height / 4 - test_font.height * size / 2, test_font, size,
+              FOREGROUND_COLOR);
 
-    return oc;
+  return oc;
 }
 
 Olivec_Canvas test_hello_world_text_rendering(void) {

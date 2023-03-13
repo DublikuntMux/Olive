@@ -1,5 +1,6 @@
 #include "vc.c"
 #include <math.h>
+#include <math/vec.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -11,47 +12,8 @@ static uint32_t pixels[WIDTH * HEIGHT];
 static float zbuffer[WIDTH * HEIGHT] = {0};
 static float angle = 0;
 
-typedef struct {
-  float x, y;
-} Vector2;
-
-static Vector2 make_vector2(float x, float y) {
-  Vector2 v2;
-  v2.x = x;
-  v2.y = y;
-  return v2;
-}
-
-typedef struct {
-  float x, y, z;
-} Vector3;
-
-static Vector3 make_vector3(float x, float y, float z) {
-  Vector3 v3;
-  v3.x = x;
-  v3.y = y;
-  v3.z = z;
-  return v3;
-}
-
-#define EPSILON 1e-6
-
-static Vector2 project_3d_2d(Vector3 v3) {
-  if (v3.z < 0)
-    v3.z = -v3.z;
-  if (v3.z < EPSILON)
-    v3.z += EPSILON;
-  return make_vector2(v3.x / v3.z, v3.y / v3.z);
-}
-
-static Vector2 project_2d_scr(Vector2 v2) {
-  return make_vector2((v2.x + 1) / 2 * WIDTH, (1 - (v2.y + 1) / 2) * HEIGHT);
-}
-
-static Vector3 rotate_y(Vector3 p, float delta_angle) {
-  float angle = atan2f(p.z, p.x) + delta_angle;
-  float mag = sqrtf(p.x * p.x + p.z * p.z);
-  return make_vector3(cosf(angle) * mag, p.y, sinf(angle) * mag);
+static vec2 project_2d_scr(vec2 v2) {
+  return make_vec2((v2.x + 1) / 2 * WIDTH, (1 - (v2.y + 1) / 2) * HEIGHT);
 }
 
 Olivec_Canvas vc_render(float dt) {
@@ -66,18 +28,18 @@ Olivec_Canvas vc_render(float dt) {
     int a = faces[i][0];
     int b = faces[i][1];
     int c = faces[i][2];
-    Vector3 v1 = rotate_y(
-        make_vector3(vertices[a][0], vertices[a][1], vertices[a][2]), angle);
-    Vector3 v2 = rotate_y(
-        make_vector3(vertices[b][0], vertices[b][1], vertices[b][2]), angle);
-    Vector3 v3 = rotate_y(
-        make_vector3(vertices[c][0], vertices[c][1], vertices[c][2]), angle);
+    vec3 v1 = vec3_rotate_y(
+        make_vec3(vertices[a][0], vertices[a][1], vertices[a][2]), angle);
+    vec3 v2 = vec3_rotate_y(
+        make_vec3(vertices[b][0], vertices[b][1], vertices[b][2]), angle);
+    vec3 v3 = vec3_rotate_y(
+        make_vec3(vertices[c][0], vertices[c][1], vertices[c][2]), angle);
     v1.z += 1.5;
     v2.z += 1.5;
     v3.z += 1.5;
-    Vector2 p1 = project_2d_scr(project_3d_2d(v1));
-    Vector2 p2 = project_2d_scr(project_3d_2d(v2));
-    Vector2 p3 = project_2d_scr(project_3d_2d(v3));
+    vec2 p1 = project_2d_scr(project_3d_2d(v1));
+    vec2 p2 = project_2d_scr(project_3d_2d(v2));
+    vec2 p3 = project_2d_scr(project_3d_2d(v3));
 
     int x1 = p1.x;
     int x2 = p2.x;

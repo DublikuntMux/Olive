@@ -1,5 +1,5 @@
 #include <math.h>
-#include <vc.c>
+#include "helpers/vc.c"
 
 #define WIDTH 960
 #define HEIGHT 720

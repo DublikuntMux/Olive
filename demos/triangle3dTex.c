@@ -1,6 +1,5 @@
 #include <math.h>
-#include <vc.c>
-
+#include "helpers/vc.c"
 #include "./assets/lavastone.c"
 #include "./assets/oldstone.c"
 #include "./assets/tsodinPog.c"

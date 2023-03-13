@@ -3,22 +3,11 @@ import platform
 import re
 import subprocess
 
-architectures = ["x86_32", "x86_64", "arm32",
-                 "arm64", "rv64", "ppc32", "ppc64", "wasm32"]
+architectures = ["x86_32", "x86_64", "arm32", "arm64"]
 architecture_aliases = {
     "x86": "x86_32",
     "x64": "x86_64",
     "amd64": "x86_64",
-    "armv7": "arm32",
-    "armv8": "arm64",
-    "arm64v8": "arm64",
-    "aarch64": "arm64",
-    "rv": "rv64",
-    "riscv": "rv64",
-    "riscv64": "rv64",
-    "ppcle": "ppc32",
-    "ppc": "ppc32",
-    "ppc64le": "ppc64",
 }
 
 
