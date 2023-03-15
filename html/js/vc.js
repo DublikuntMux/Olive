@@ -7,7 +7,9 @@ function make_environment(...envs) {
                     return env[prop];
                 }
             }
-            return (...args) => { console.error("NOT IMPLEMENTED: " + prop, args) }
+            return (...args) => {
+                console.error("NOT IMPLEMENTED: " + prop, args)
+            }
         }
     });
 }
@@ -78,16 +80,19 @@ async function startDemo(elementId, wasmPath) {
     }
 
     let prev = null;
+
     function first(timestamp) {
         prev = timestamp;
         render(0);
         window.requestAnimationFrame(loop);
     }
+
     function loop(timestamp) {
         const dt = timestamp - prev;
         prev = timestamp;
         if (!paused) render(dt);
         window.requestAnimationFrame(loop);
     }
+
     window.requestAnimationFrame(first);
 }

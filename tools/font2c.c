@@ -62,7 +62,6 @@ void write_byte_array_code_for_char_to_file(FILE *out, FT_Face face,
     return;
   }
 
-  // work out how many lines to skip at start
   int skip_lines = (int)baseline - face->glyph->bitmap_top;
   if (skip_lines < 0)
     skip_lines = 0;
@@ -108,7 +107,6 @@ int generate_c_file_from_ttf(const char *input_file_path,
 
   // TODO: allow user to choose a face_index other than 0
   // TODO: check for available face_indices by setting face_index to -1 and
-  // checking face->num_faces
   error = FT_New_Face(library, input_file_path, 0, &face);
   if (error == FT_Err_Unknown_File_Format) {
     fprintf(stderr, "ERROR: font file %s: format is not supported\n",
@@ -148,13 +146,6 @@ int generate_c_file_from_ttf(const char *input_file_path,
   }
 
   fprintf(out, "};\n");
-
-  // static Olivec_Font olivec_default_font = {
-  // 	.glyphs = &olivec_default_glyphs[0][0][0],
-  // 	.width = OLIVEC_DEFAULT_FONT_WIDTH,
-  // 	.height = OLIVEC_DEFAULT_FONT_HEIGHT,
-  // };
-
   fprintf(out, "\nstatic Olivec_Font %s = {\n", name);
   fprintf(out, "    .glyphs = &%s_glyphs[0][0][0],\n", name);
   fprintf(out, "    .width = %zu,\n", width);

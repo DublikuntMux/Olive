@@ -1,4 +1,3 @@
-#include "olive/math/vec.h"
 #include <errno.h>
 #include <float.h>
 #include <limits.h>
@@ -72,7 +71,11 @@ defer:
 }
 
 typedef struct {
-  vec3 *items;
+  float x, y, z;
+} Vector;
+
+typedef struct {
+  Vector *items;
   size_t capacity;
   size_t count;
 } Vertices;
@@ -88,6 +91,15 @@ Face make_face(int a, int b, int c) {
       .c = c,
   };
   return f;
+}
+
+Vector make_vec(float x, float y, float z) {
+  Vector v = {
+      .x = x,
+      .y = y,
+      .z = z,
+  };
+  return v;
 }
 
 typedef struct {
@@ -123,7 +135,7 @@ void generate_code(FILE *out, Vertices vertices, Faces faces) {
   fprintf(out, "\n");
   fprintf(out, "static const float vertices[][3] = {\n");
   for (size_t i = 0; i < vertices.count; ++i) {
-    vec3 v = vertices.items[i];
+    Vector v = vertices.items[i];
     fprintf(out, "    {%ff, %ff, %ff},\n", v.x, v.y, v.z);
   }
   fprintf(out, "};\n");
@@ -140,7 +152,7 @@ void generate_code(FILE *out, Vertices vertices, Faces faces) {
   fprintf(out, "#endif // OBJ_H\n");
 }
 
-vec3 remap_object(vec3 v, float scale, float lx, float hx, float ly, float hy,
+Vector remap_object(Vector v, float scale, float lx, float hx, float ly, float hy,
                   float lz, float hz) {
   float cx = lx + (hx - lx) / 2;
   float cy = ly + (hy - ly) / 2;
@@ -261,8 +273,7 @@ int main(int argc, char **argv) {
           lz = z;
         if (hz < z)
           hz = z;
-
-        da_append(&vertices, make_vec3(x, y, z));
+        da_append(&vertices, make_vec(x, y, z));
       } else if (sv_eq(kind, SV("f"))) {
         char *endptr;
 
@@ -305,7 +316,6 @@ int main(int argc, char **argv) {
   printf("Faces:    %zu (index: %d..%d)\n", faces.count, lf, hf);
 
   for (size_t i = 0; i < vertices.count; ++i) {
-    vertices.items[i] =
         remap_object(vertices.items[i], scale, lx, hx, ly, hy, lz, hz);
   }
 

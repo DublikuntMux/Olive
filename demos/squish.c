@@ -1,8 +1,7 @@
 #include "./assets/Lena_112.h"
 #include "helpers/vc.c"
-#include <olive/base/color.h>
-#include <olive/base/sprite.h>
 #include <math.h>
+#include <olive/olive.h>
 
 #define WIDTH 960
 #define HEIGHT 720

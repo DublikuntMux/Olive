@@ -1,9 +1,6 @@
 #include "helpers/vc.c"
-#include <olive/base/figure.h>
-#include <olive/base/color.h>
 #include <math.h>
-
-#define PI 3.14159265359
+#include <olive/olive.h>
 
 #define WIDTH 960
 #define HEIGHT 720

@@ -8,8 +8,6 @@
 #include "./assets/tsodinCup.h"
 #include "./assets/tsodinPog.h"
 
-#define PI 3.14159265359
-
 #define return_defer(value)                                                    \
   do {                                                                         \
     result = (value);                                                          \
@@ -41,10 +39,6 @@ static void *context_realloc(void *oldp, size_t oldsz, size_t newsz) {
 #include <stb_image_write.h>
 
 #include "olive/olive.h"
-#include "olive/base/color.h"
-#include "olive/base/figure.h"
-#include "olive/base/sprite.h"
-#include "olive/base/tringle.h"
 
 #define BACKGROUND_COLOR 0xFF202020
 #define FOREGROUND_COLOR 0xFF2020FF
@@ -72,6 +66,7 @@ bool canvas_stbi_save(Olivec_Canvas oc, const char *file_path) {
 
 typedef struct {
   Olivec_Canvas (*generate_actual_canvas)(void);
+
   const char *id;
   const char *expected_file_path;
   const char *actual_file_path;
@@ -685,8 +680,10 @@ Test_Case *find_test_case_by_id(const char *id) {
   }
   return NULL;
 }
+
 typedef struct {
   int (*run)(const char *program_path, int argc, char **argv);
+
   const char *id;
   const char *description;
 } Subcmd;

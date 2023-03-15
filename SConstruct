@@ -77,25 +77,17 @@ def using_clang(env):
 customs = ["custom.py"]
 opts = Variables(customs, ARGUMENTS)
 opts.Add(BoolVariable("lto", "Link-time optimization", False))
-opts.Add(EnumVariable("target", "Target for build", "native_sdl",
-                      ("linux_sdl", "windows_sdl", "native_sdl",
-                       "linux_term", "windows_term", "native_term",
-                       "web", "tools", "prepare", "tests")))
+opts.Add(EnumVariable("target", "Target for build", "native_sdl", ("linux_sdl", "windows_sdl",
+         "native_sdl", "linux_term", "windows_term", "native_term", "web", "tools", "prepare", "tests")))
 opts.Add(EnumVariable("arch", "CPU architecture", "auto",
          ["auto"] + architectures, architecture_aliases))
-opts.Add(
-    EnumVariable(
-        "optimize", "Optimization level", "speed_trace", (
-            "none", "custom", "debug", "speed", "speed_trace", "size")
-    )
-)
+opts.Add(EnumVariable("optimize", "Optimization level", "speed_trace",
+         ("none", "custom", "debug", "speed", "speed_trace", "size")))
 opts.Add(BoolVariable("clang", "Use clang", False))
 
 common_flags = ["-pipe", "-Wall", "-Wextra", "-pedantic"]
-env = Environment(CCFLAGS=common_flags, LINKFLAGS=common_flags,
-                  CPPPATH=['src', 'build', 'thirdparty', 'include'],
-                  COMPILATIONDB_USE_ABSPATH=True
-                  )
+env = Environment(CCFLAGS=common_flags, LINKFLAGS=common_flags, CPPPATH=[
+                  'src', 'build', 'thirdparty', 'include'], COMPILATIONDB_USE_ABSPATH=True)
 env.Tool('compilation_db')
 env.CompilationDatabase()
 opts.Update(env)
@@ -207,10 +199,10 @@ if env["target"] == "tests":
 elif env["target"] == "tools":
     env_tool.Program(target='build/tools/png2c',
                      source='tools/png2c.c', LIBS=['m'])
-    env_tool.Program(target='build/tools/obj2c', LIBPATH='build/libs',
-                     source='tools/obj2c.c', LIBS=['m', 'olive'])
-    env_tool.Program(target='build/tools/font2c', source='tools/font2c.c', CCFLAGS='$CCFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16 -L/usr/local/lib',
-                     LINKFLAGS='$LINKFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16 -L/usr/local/lib', LIBS=['m', 'freetype'])
+    env_tool.Program(target='build/tools/obj2c',
+                     source='tools/obj2c.c')
+    env_tool.Program(target='build/tools/font2c', source='tools/font2c.c', CCFLAGS='$CCFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16',
+                     LINKFLAGS='$LINKFLAGS -I/usr/include/freetype2 -I/usr/include/libpng16', LIBS=['freetype'], LIBPATH=['/usr/local/lib'])
 
 elif env["target"] == "prepare":
     if not os.path.exists("build"):
@@ -255,8 +247,8 @@ elif env["target"] == "prepare":
 
 elif env["target"] == "native_sdl":
     for file in get_source("demos"):
-        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)),
-                        LIBPATH='build/libs', LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM -march=native')
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)), LIBPATH='build/libs',
+                        LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM -march=native')
 
 elif env["target"] == "linux_sdl":
     host_is_64_bit = sys.maxsize > 2**32
@@ -284,8 +276,8 @@ elif env["target"] == "windows_sdl":
 
 elif env["target"] == "native_term":
     for file in get_source("demos"):
-        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)),
-                        LIBPATH='build/libs', LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600 -march=native')
+        env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)), LIBPATH='build/libs',
+                        LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600 -march=native')
 
 elif env["target"] == "linux_term":
     host_is_64_bit = sys.maxsize > 2**32
@@ -318,5 +310,7 @@ elif env["target"] == "web":
     for file in get_source("demos"):
         env_app.Program(target='build/demos/' + file.replace('.c', '') + '.wasm', source=(os.path.join("demos", file)), LIBPATH='build/libs', LIBS=[
                         'm', 'SDL', 'olive'], LINKFLAGS='$LINKFLAGS -Wl,--no-entry -Wl,--export=vc_render -Wl,--export=__heap_base -sFILESYSTEM=0 -sUSE_SDL=2 -sMALLOC=emmalloc -sALLOW_MEMORY_GROWTH -sLEGACY_GL_EMULATION', CCFLAGS='$CCFLAGS -fno-builtin --closure=1 --no-standard-libraries -DVC_PLATFORM=VC_WASM_PLATFORM')
-        shutil.copyfile('build/demos/' + file.replace('.c', '') +
-                        '.wasm', 'html/wasm/' + file.replace('.c', '') + '.wasm')
+
+        if os.path.exists('build/demos/' + file.replace('.c', '') + '.wasm'):
+            shutil.copyfile('build/demos/' + file.replace('.c', '') +
+                            '.wasm', 'html/wasm/' + file.replace('.c', '') + '.wasm')

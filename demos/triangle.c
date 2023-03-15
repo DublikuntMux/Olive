@@ -1,8 +1,6 @@
 #include "helpers/vc.c"
-#include <olive/base/color.h>
-#include <olive/base/figure.h>
-#include <olive/base/tringle.h>
 #include <math.h>
+#include <olive/olive.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -18,8 +16,6 @@ static float circle_x = WIDTH / 2.0f;
 static float circle_y = HEIGHT / 2.0f;
 static float circle_dx = 100;
 static float circle_dy = 100;
-
-#define PI 3.14159265359
 
 static inline void rotate_point(float *x, float *y) {
   float dx = *x - WIDTH / 2.0f;

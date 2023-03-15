@@ -1,10 +1,12 @@
 #ifndef OLIVE_FONT_H
 #define OLIVE_FONT_H
 
+#include "olive/types.h"
+
 #define OLIVEC_DEFAULT_FONT_HEIGHT 6
 #define OLIVEC_DEFAULT_FONT_WIDTH 6
 
-static char olivec_default_glyphs[128][OLIVEC_DEFAULT_FONT_HEIGHT][OLIVEC_DEFAULT_FONT_WIDTH] = {
+char olivec_default_glyphs[128][OLIVEC_DEFAULT_FONT_HEIGHT][OLIVEC_DEFAULT_FONT_WIDTH] = {
     ['a'] = {
         {0, 0, 0, 0, 0},
         {0, 1, 1, 0, 0},
@@ -676,7 +678,7 @@ static char olivec_default_glyphs[128][OLIVEC_DEFAULT_FONT_HEIGHT][OLIVEC_DEFAUL
     },
 };
 
-static Olivec_Font olivec_default_font = {
+Olivec_Font olivec_default_font = {
     .glyphs = &olivec_default_glyphs[0][0][0],
     .width = OLIVEC_DEFAULT_FONT_HEIGHT,
     .height = OLIVEC_DEFAULT_FONT_WIDTH,

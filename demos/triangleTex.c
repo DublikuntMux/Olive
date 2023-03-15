@@ -1,8 +1,7 @@
 #include "assets/Lena_112.h"
 #include "helpers/vc.c"
-#include <olive/base/color.h>
-#include <olive/base/tringle.h>
 #include <math.h>
+#include <olive/olive.h>
 
 #define WIDTH 960
 #define HEIGHT 720
@@ -11,8 +10,6 @@
 static uint32_t pixels[WIDTH * HEIGHT];
 static float triangle_angle = 0;
 
-#define PI 3.14159265359
-
 Olivec_Canvas vc_render(float dt) {
   Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
   Olivec_Canvas Lena_112 = olivec_canvas(Lena_112_pixels, Lena_112_width,
@@ -20,7 +17,6 @@ Olivec_Canvas vc_render(float dt) {
 
   olivec_fill(oc, BACKGROUND_COLOR);
 
-  // Triangle
   {
     triangle_angle += 0.5f * PI * dt;
 

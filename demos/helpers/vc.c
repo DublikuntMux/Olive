@@ -33,10 +33,7 @@
 // -DVC_PLATFORM=VC_WASM_PLATFORM demo.c
 // ```
 
-#include "olive/olive.h"
-#ifdef OLIVE_MTHREAD_H
-#include <olive/mthread/mthread.h>
-#endif
+#include <olive/olive.h>
 
 Olivec_Canvas vc_render(float dt);
 
@@ -50,6 +47,7 @@ Olivec_Canvas vc_render(float dt);
 #define VC_TERM_PLATFORM 2
 
 #if VC_PLATFORM == VC_SDL_PLATFORM
+
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
@@ -79,10 +77,6 @@ static bool vc_sdl_resize_texture(SDL_Renderer *renderer, size_t new_width,
 
 int main(void) {
   int result;
-
-#ifdef OLIVE_MTHREAD_H
-  mthread_init();
-#endif
 
   SDL_Window *window = NULL;
   SDL_Renderer *renderer = NULL;
@@ -178,7 +172,6 @@ defer:
 
 #elif VC_PLATFORM == VC_TERM_PLATFORM
 #include <assert.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -6,7 +6,7 @@ indent_size = 4
 end_of_line = lf
 charset = utf-8
 insert_final_newline = true
-brace_style = end_of_line
+max_line_length = 120
 
 [*.{cpp,hpp,c,h,mm}]
 trim_trailing_whitespace = true

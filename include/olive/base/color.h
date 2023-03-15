@@ -1,7 +1,7 @@
 #ifndef OLIVE_COLOR_H
 #define OLIVE_COLOR_H
 
-#include "olive/olive.h"
+#include "olive/types.h"
 #include <stdint.h>
 
 // TODO: custom pixel formats
@@ -15,8 +15,11 @@
    (((b)&0xFF) << (8 * 2)) | (((a)&0xFF) << (8 * 3)))
 
 void olivec_blend_color(uint32_t *c1, uint32_t c2);
+
 void olivec_fill(Olivec_Canvas oc, uint32_t color);
+
 uint32_t mix_colors2(uint32_t c1, uint32_t c2, int u1, int det);
+
 uint32_t mix_colors3(uint32_t c1, uint32_t c2, uint32_t c3, int u1, int u2,
                      int det);
 
