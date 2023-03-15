@@ -262,7 +262,6 @@ int distance_hsl256(int i, int h, int s, int l) {
   return dh * dh + ds * ds + dl * dl;
 }
 
-// TODO: bring find_ansi_index_by_rgb from image2term
 int find_ansi_index_by_hsl(int h, int s, int l) {
   int index = 0;
   for (int i = 0; i < 256; ++i) {
@@ -407,7 +406,6 @@ int main(void) {
       }
       printf("\033[0m\n");
     }
-
     usleep(1000 * 1000 / 60);
     printf("\033[%zuA", vc_term_scaled_down_height);
     printf("\033[%zuD", vc_term_scaled_down_width);
