@@ -3,18 +3,18 @@
 
 #include "olive/types.h"
 
-#define OLIVE_VEC3_ONE_INIT                                                    \
-  { 1.0f, 1.0f, 1.0f }
-#define OLIVE_VEC3_ZERO_INIT                                                   \
-  { 0.0f, 0.0f, 0.0f }
+#define OLIVE_VEC3_ONE_INIT \
+	{ 1.0f, 1.0f, 1.0f }
+#define OLIVE_VEC3_ZERO_INIT \
+	{ 0.0f, 0.0f, 0.0f }
 
 #define OLIVE_VEC3_ONE ((vec3)OLIVE_VEC3_ONE_INIT)
 #define OLIVE_VEC3_ZERO ((vec3)OLIVE_VEC3_ZERO_INIT)
 
-#define OLIVE_YUP ((vec3){0.0f, 1.0f, 0.0f})
-#define OLIVE_ZUP ((vec3){0.0f, 0.0f, 1.0f})
-#define OLIVE_XUP ((vec3){1.0f, 0.0f, 0.0f})
-#define OLIVE_FORWARD ((vec3){0.0f, 0.0f, -1.0f})
+#define OLIVE_YUP ((vec3){ 0.0f, 1.0f, 0.0f })
+#define OLIVE_ZUP ((vec3){ 0.0f, 0.0f, 1.0f })
+#define OLIVE_XUP ((vec3){ 1.0f, 0.0f, 0.0f })
+#define OLIVE_FORWARD ((vec3){ 0.0f, 0.0f, -1.0f })
 
 #define SHUFFLE3(z, y, x) (((z) << 4) | ((y) << 2) | (x))
 #define OLIVE_XXX SHUFFLE3(0, 0, 0)

@@ -3,21 +3,21 @@
 
 #include "olive/types.h"
 
-#define OLIVE_MAT4_IDENTITY_INIT                                               \
-  {                                                                            \
-    {1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f},                        \
-        {0.0f, 0.0f, 1.0f, 0.0f}, {                                            \
-      0.0f, 0.0f, 0.0f, 1.0f                                                   \
-    }                                                                          \
-  }
+#define OLIVE_MAT4_IDENTITY_INIT                                \
+	{                                                           \
+		{ 1.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f }, \
+				{ 0.0f, 0.0f, 1.0f, 0.0f }, {                   \
+			0.0f, 0.0f, 0.0f, 1.0f                              \
+		}                                                       \
+	}
 
-#define OLIVE_MAT4_ZERO_INIT                                                   \
-  {                                                                            \
-    {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f},                        \
-        {0.0f, 0.0f, 0.0f, 0.0f}, {                                            \
-      0.0f, 0.0f, 0.0f, 0.0f                                                   \
-    }                                                                          \
-  }
+#define OLIVE_MAT4_ZERO_INIT                                    \
+	{                                                           \
+		{ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, \
+				{ 0.0f, 0.0f, 0.0f, 0.0f }, {                   \
+			0.0f, 0.0f, 0.0f, 0.0f                              \
+		}                                                       \
+	}
 
 #define OLIVE_MAT4_IDENTITY ((mat4)OLIVE_MAT4_IDENTITY_INIT)
 #define OLIVE_MAT4_ZERO ((mat4)OLIVE_MAT4_ZERO_INIT)

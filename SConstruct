@@ -169,7 +169,7 @@ if not env["target"] == "prepare":
                 if file.endswith('.c'):
                     yield file
     lib_src = []
-    list_dir = ["src", "src/base", "src/math"]
+    list_dir = ["src", "src/base", "src/math", "src/utils"]
 
     for dir in list_dir:
         for file in get_source(dir):

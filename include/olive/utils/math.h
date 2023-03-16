@@ -27,7 +27,7 @@ float olive_percent(float from, float to, float current);
 float olive_percentc(float from, float to, float current);
 void olive_swap(int *__restrict a, int *__restrict b);
 void olive_swapf(float *__restrict a, float *__restrict b);
-bool olivec_barycentric(int x1, int y1, int x2, int y2, int x3, int y3, int xp,
-                        int yp, int *u1, int *u2, int *det);
+bool olive_barycentric(int x1, int y1, int x2, int y2, int x3, int y3, int xp,
+		int yp, int *u1, int *u2, int *det);
 
 #endif // OLIVE_MUTILS_H

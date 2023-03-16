@@ -3,14 +3,14 @@
 
 #include "olive/types.h"
 
-#define MAT2_IDENTITY_INIT                                                     \
-  {                                                                            \
-    {1.0f, 0.0f}, { 0.0f, 1.0f }                                               \
-  }
-#define MAT2_ZERO_INIT                                                         \
-  {                                                                            \
-    {0.0f, 0.0f}, { 0.0f, 0.0f }                                               \
-  }
+#define MAT2_IDENTITY_INIT             \
+	{                                  \
+		{ 1.0f, 0.0f }, { 0.0f, 1.0f } \
+	}
+#define MAT2_ZERO_INIT                 \
+	{                                  \
+		{ 0.0f, 0.0f }, { 0.0f, 0.0f } \
+	}
 
 #define MAT2_IDENTITY ((mat2)MAT2_IDENTITY_INIT)
 #define MAT2_ZERO ((mat2)MAT2_ZERO_INIT)

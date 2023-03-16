@@ -8,28 +8,8 @@
 #define PIf ((float)PI)
 #define FLT_EPSILON 1e-5f
 
-typedef struct {
-  size_t width, height;
-  const char *glyphs;
-} Olivec_Font;
-
-typedef struct {
-  uint32_t *pixels;
-  size_t width;
-  size_t height;
-  size_t stride;
-} Olivec_Canvas;
-
-typedef struct {
-  int x1, x2;
-  int y1, y2;
-
-  int ox1, ox2;
-  int oy1, oy2;
-} Olivec_Normalized_Rect;
-
-#define OLIVEC_PIXEL(oc, x, y) (oc).pixels[(y) * (oc).stride + (x)]
-#define OLIVEC_CANVAS_NULL ((Olivec_Canvas){0})
+#define OLIVE_PIXEL(oc, x, y) (oc).pixels[(y) * (oc).stride + (x)]
+#define OLIVE_CANVAS_NULL ((Olive_Canvas){ 0 })
 
 typedef int ivec2[2];
 typedef int ivec3[3];
@@ -43,5 +23,25 @@ typedef vec4 versor;
 typedef vec3 mat3[3];
 typedef __attribute((aligned(16))) vec2 mat2[2];
 typedef __attribute((aligned(16))) vec4 mat4[4];
+
+typedef struct {
+	size_t width, height;
+	const char *glyphs;
+} Olive_Font;
+
+typedef struct {
+	uint32_t *pixels;
+	size_t width;
+	size_t height;
+	size_t stride;
+} Olive_Canvas;
+
+typedef struct {
+	ivec2 start;
+	ivec2 end;
+
+	ivec2 ostart;
+	ivec2 oend;
+} Olive_Normalized_Rect;
 
 #endif // OLIVE_TYPES_H

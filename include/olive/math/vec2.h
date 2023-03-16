@@ -3,10 +3,10 @@
 
 #include "olive/types.h"
 
-#define OLIVE_VEC2_ONE_INIT                                                    \
-  { 1.0f, 1.0f }
-#define OLIVE_VEC2_ZERO_INIT                                                   \
-  { 0.0f, 0.0f }
+#define OLIVE_VEC2_ONE_INIT \
+	{ 1.0f, 1.0f }
+#define OLIVE_VEC2_ZERO_INIT \
+	{ 0.0f, 0.0f }
 
 #define OLIVE_VEC2_ONE ((vec2)OLIVE_VEC2_ONE_INIT)
 #define OLIVE_VEC2_ZERO ((vec2)OLIVE_VEC2_ZERO_INIT)

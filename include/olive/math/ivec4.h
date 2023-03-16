@@ -3,10 +3,10 @@
 
 #include "olive/types.h"
 
-#define IVEC4_ONE_INIT                                                         \
-  { 1, 1, 1, 1 }
-#define IVEC4_ZERO_INIT                                                        \
-  { 0, 0, 0, 0 }
+#define IVEC4_ONE_INIT \
+	{ 1, 1, 1, 1 }
+#define IVEC4_ZERO_INIT \
+	{ 0, 0, 0, 0 }
 
 #define IVEC4_ONE ((ivec4)IVEC4_ONE_INIT)
 #define IVEC4_ZERO ((ivec4)IVEC4_ZERO_INIT)

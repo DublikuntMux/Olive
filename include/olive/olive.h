@@ -5,8 +5,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "olive/math/utils.h"
 #include "types.h"
+
+#include "olive/utils/math.h"
 
 #include "math/ivec2.h"
 #include "math/ivec3.h"
@@ -31,10 +32,10 @@
 
 #include "font.h"
 
-void olivec_text(Olivec_Canvas oc, const char *text, int tx, int ty,
-                 Olivec_Font font, size_t glyph_size, uint32_t color);
-double olivec_binomial_coeffs(int n, int i);
-void olivec_bezier(Olivec_Canvas oc, int degree, uint32_t color, int x1, int y1,
-                   int cx1, int cy1, int cx2, int cy2, int x2, int y2);
+void olive_text(Olive_Canvas oc, const char *text, int tx, int ty,
+		Olive_Font font, size_t glyph_size, uint32_t color);
+double olive_binomial_coeffs(int n, int i);
+void olive_bezier(Olive_Canvas oc, int degree, uint32_t color, int x1, int y1,
+		int cx1, int cy1, int cx2, int cy2, int x2, int y2);
 
 #endif // OLIVE_H

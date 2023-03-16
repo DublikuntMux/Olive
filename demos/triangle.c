@@ -18,51 +18,51 @@ static float circle_dx = 100;
 static float circle_dy = 100;
 
 static inline void rotate_point(float *x, float *y) {
-  float dx = *x - WIDTH / 2.0f;
-  float dy = *y - HEIGHT / 2.0f;
-  float mag = sqrtf(dx * dx + dy * dy);
-  float dir = atan2f(dy, dx) + triangle_angle;
-  *x = cosf(dir) * mag + WIDTH / 2.0f;
-  *y = sinf(dir) * mag + HEIGHT / 2.0f;
+	float dx = *x - WIDTH / 2.0f;
+	float dy = *y - HEIGHT / 2.0f;
+	float mag = sqrtf(dx * dx + dy * dy);
+	float dir = atan2f(dy, dx) + triangle_angle;
+	*x = cosf(dir) * mag + WIDTH / 2.0f;
+	*y = sinf(dir) * mag + HEIGHT / 2.0f;
 }
 
-Olivec_Canvas vc_render(float dt) {
-  Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
+Olive_Canvas vc_render(float dt) {
+	Olive_Canvas oc = olive_canvas(pixels, WIDTH, HEIGHT, WIDTH);
 
-  olivec_fill(oc, BACKGROUND_COLOR);
+	olive_fill(oc, BACKGROUND_COLOR);
 
-  // Triangle
-  {
-    triangle_angle += 0.5f * PI * dt;
+	// Triangle
+	{
+		triangle_angle += 0.5f * PI * dt;
 
-    float x1 = WIDTH / 2.0f, y1 = HEIGHT / 8.0f;
-    float x2 = WIDTH / 8.0f, y2 = HEIGHT / 2.0f;
-    float x3 = WIDTH * 7.0f / 8.0f, y3 = HEIGHT * 7.0f / 8.0f;
-    rotate_point(&x1, &y1);
-    rotate_point(&x2, &y2);
-    rotate_point(&x3, &y3);
-    olivec_triangle3c(oc, x1, y1, x2, y2, x3, y3, 0xFF2020FF, 0xFF20FF20,
-                      0xFFFF2020);
-  }
+		float x1 = WIDTH / 2.0f, y1 = HEIGHT / 8.0f;
+		float x2 = WIDTH / 8.0f, y2 = HEIGHT / 2.0f;
+		float x3 = WIDTH * 7.0f / 8.0f, y3 = HEIGHT * 7.0f / 8.0f;
+		rotate_point(&x1, &y1);
+		rotate_point(&x2, &y2);
+		rotate_point(&x3, &y3);
+		olive_triangle3c(oc, x1, y1, x2, y2, x3, y3, 0xFF2020FF, 0xFF20FF20,
+				0xFFFF2020);
+	}
 
-  // Circle
-  {
-    float x = circle_x + circle_dx * dt;
-    if (x - CIRCLE_RADIUS < 0 || x + CIRCLE_RADIUS >= WIDTH) {
-      circle_dx *= -1;
-    } else {
-      circle_x = x;
-    }
+	// Circle
+	{
+		float x = circle_x + circle_dx * dt;
+		if (x - CIRCLE_RADIUS < 0 || x + CIRCLE_RADIUS >= WIDTH) {
+			circle_dx *= -1;
+		} else {
+			circle_x = x;
+		}
 
-    float y = circle_y + circle_dy * dt;
-    if (y - CIRCLE_RADIUS < 0 || y + CIRCLE_RADIUS >= HEIGHT) {
-      circle_dy *= -1;
-    } else {
-      circle_y = y;
-    }
+		float y = circle_y + circle_dy * dt;
+		if (y - CIRCLE_RADIUS < 0 || y + CIRCLE_RADIUS >= HEIGHT) {
+			circle_dy *= -1;
+		} else {
+			circle_y = y;
+		}
 
-    olivec_circle(oc, circle_x, circle_y, CIRCLE_RADIUS, CIRCLE_COLOR);
-  }
+		olive_circle(oc, circle_x, circle_y, CIRCLE_RADIUS, CIRCLE_COLOR);
+	}
 
-  return oc;
+	return oc;
 }

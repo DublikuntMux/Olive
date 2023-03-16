@@ -3,12 +3,12 @@
 
 #include "olive/types.h"
 
-#define OLIVE_VEC4_ONE_INIT                                                    \
-  { 1.0f, 1.0f, 1.0f, 1.0f }
-#define OLIVE_VEC4_BLACK_INIT                                                  \
-  { 0.0f, 0.0f, 0.0f, 1.0f }
-#define OLIVE_VEC4_ZERO_INIT                                                   \
-  { 0.0f, 0.0f, 0.0f, 0.0f }
+#define OLIVE_VEC4_ONE_INIT \
+	{ 1.0f, 1.0f, 1.0f, 1.0f }
+#define OLIVE_VEC4_BLACK_INIT \
+	{ 0.0f, 0.0f, 0.0f, 1.0f }
+#define OLIVE_VEC4_ZERO_INIT \
+	{ 0.0f, 0.0f, 0.0f, 0.0f }
 
 #define OLIVE_VEC4_ONE ((vec4)OLIVE_VEC4_ONE_INIT)
 #define OLIVE_VEC4_BLACK ((vec4)OLIVE_VEC4_BLACK_INIT)

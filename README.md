@@ -24,7 +24,7 @@ to create the PNG image_
 
 ```c
 // flag_jp.c
-#include "olive.c"
+#include "olive.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -36,10 +36,10 @@ uint32_t pixels[WIDTH*HEIGHT];
 
 int main(void)
 {
-    Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT, WIDTH);
+    Olive_Canvas oc = olive_canvas(pixels, WIDTH, HEIGHT, WIDTH);
     // Taken from https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg
-    olivec_fill(oc, 0xFFFFFFFF);
-    olivec_circle(oc, WIDTH/2, HEIGHT/2, 180, 0xFF2D00BC);
+    olive_fill(oc, 0xFFFFFFFF);
+    olive_circle(oc, WIDTH/2, HEIGHT/2, 180, 0xFF2D00BC);
 
     const char *file_path = "flag_jp.png";
     if (!stbi_write_png(file_path, WIDTH, HEIGHT, 4, pixels, sizeof(uint32_t)*WIDTH)) {
@@ -116,9 +116,7 @@ To run the Terminal version of a demo do
 ./build/demos/<demo>.term
 ```
 
-To run the WASM versions of the demos
-from [https://tsoding.github.io/olive.c/](https://tsoding.github.io/olive.c/)
-locally do
+To run the WASM versions of the demos locally do
 
 ```console
 python3 -m http.server 6969
