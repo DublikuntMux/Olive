@@ -120,7 +120,6 @@ To run the WASM versions of the demos locally do
 
 ```console
 python3 -m http.server 6969
-iexplore.exe http://localhost:6969/
 ```
 
 ### Virtual Console

@@ -503,7 +503,7 @@ static uint32_t vc_term_compress_pixels_chunk(Olive_Canvas oc) {
 }
 
 #ifndef VC_TERM_SCALE_DOWN_FACTOR
-#define VC_TERM_SCALE_DOWN_FACTOR 15
+#define VC_TERM_SCALE_DOWN_FACTOR 16
 #endif // VC_TERM_SCALE_DOWN_FACTOR
 
 #ifndef VC_TERM_ASPECT_RATIO
@@ -538,34 +538,40 @@ void rgb_to_hsl(int r, int g, int b, int *h, int *s, int *l) {
 	float g01 = g / 255.0f;
 	float b01 = b / 255.0f;
 	float cmax = r01;
-	if (g01 > cmax)
+	if (g01 > cmax) {
 		cmax = g01;
-	if (b01 > cmax)
+	}
+	if (b01 > cmax) {
 		cmax = b01;
+	}
 	float cmin = r01;
-	if (g01 < cmin)
+	if (g01 < cmin) {
 		cmin = g01;
-	if (b01 < cmin)
+	}
+	if (b01 < cmin) {
 		cmin = b01;
+	}
 	float delta = cmax - cmin;
 	float epsilon = 1e-6f;
 	float hf;
-	if (delta < epsilon)
+	if (delta < epsilon) {
 		hf = 0;
-	else if (cmax == r01)
+	} else if (cmax == r01) {
 		hf = 60.0f * fmodf((g01 - b01) / delta, 6.0f);
-	else if (cmax == g01)
+	} else if (cmax == g01) {
 		hf = 60.0f * ((b01 - r01) / delta + 2);
-	else
+	} else {
 		hf = 60.0f * ((r01 - g01) / delta + 4);
+	}
 
 	float lf = (cmax + cmin) / 2;
 
 	float sf;
-	if (delta < epsilon)
+	if (delta < epsilon) {
 		sf = 0;
-	else
+	} else {
 		sf = delta / (1 - fabsf(2 * lf - 1));
+	}
 
 	*h = fmodf(fmodf(hf, 360.0f) + 360.0f, 360.0f);
 	*s = sf * 100.0f;
