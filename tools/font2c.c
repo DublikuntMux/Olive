@@ -140,9 +140,8 @@ int generate_c_file_from_ttf(const char *input_file_path,
 	fprintf(out, "#ifndef %s_H\n", name);
 	fprintf(out, "#define %s_H\n", name);
 	fprintf(out, "\n");
-
 	fprintf(out, "#include <olive/olive.h>\n\n");
-	fprintf(out, "static char %s_glyphs[%d][%zu][%zu] = {\n", name, TO_CHAR,
+	fprintf(out, "unsigned char %s_glyphs[%d][%zu][%zu] = {\n", name, TO_CHAR,
 			height, width);
 
 	for (unsigned char c = FROM_CHAR; c < TO_CHAR; ++c) {
@@ -151,15 +150,13 @@ int generate_c_file_from_ttf(const char *input_file_path,
 	}
 
 	fprintf(out, "};\n");
-	fprintf(out, "\nstatic Olive_Font %s = {\n", name);
+	fprintf(out, "\nOlive_Font %s = {\n", name);
 	fprintf(out, "    .glyphs = &%s_glyphs[0][0][0],\n", name);
 	fprintf(out, "    .width = %zu,\n", width);
 	fprintf(out, "    .height = %zu,\n", height);
 	fprintf(out, "};\n");
-
 	fprintf(out, "\n");
 	fprintf(out, "#endif // %s_H\n", name);
-
 	return 0;
 }
 

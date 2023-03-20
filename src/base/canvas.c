@@ -1,7 +1,7 @@
 #include "olive/base/figure.h"
 #include "olive/types.h"
 
-Olive_Canvas olive_canvas(const uint32_t *pixels, size_t width, size_t height,
+Olive_Canvas olive_canvas(uint32_t *pixels, size_t width, size_t height,
 		size_t stride) {
 	Olive_Canvas oc = {
 		.pixels = pixels,
@@ -14,7 +14,8 @@ Olive_Canvas olive_canvas(const uint32_t *pixels, size_t width, size_t height,
 
 Olive_Canvas olive_subcanvas(Olive_Canvas oc, int x, int y, int w, int h) {
 	Olive_Normalized_Rect nr = { 0 };
-	if (!olive_normalize_rect(x, y, w, h, oc.width, oc.height, &nr)) {
+	ivec2 pos = { x, y };
+	if (!olive_normalize_rect(pos, w, h, oc.width, oc.height, &nr)) {
 		return OLIVE_CANVAS_NULL;
 	}
 	oc.pixels = &OLIVE_PIXEL(oc, nr.start[0], nr.start[1]);

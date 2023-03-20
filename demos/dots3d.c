@@ -49,10 +49,11 @@ Olive_Canvas vc_render(float dt) {
 				uint32_t r = ix * 255 / GRID_COUNT;
 				uint32_t g = iy * 255 / GRID_COUNT;
 				uint32_t b = iz * 255 / GRID_COUNT;
-				uint32_t color =
-						0xFF000000 | (r << (0 * 8)) | (g << (1 * 8)) | (b << (2 * 8));
-				olive_circle(oc, (x + 1) / 2 * WIDTH, (y + 1) / 2 * HEIGHT,
-						CIRCLE_RADIUS, color);
+				uint32_t color = 0xFF000000 | (r << (0 * 8)) | (g << (1 * 8)) | (b << (2 * 8));
+
+				ivec2 pos = {(x + 1) / 2 * WIDTH, (y + 1) / 2 * HEIGHT};
+
+				olive_circle(oc, pos, CIRCLE_RADIUS, color);
 			}
 		}
 	}

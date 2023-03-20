@@ -6,13 +6,13 @@ int olive_sign(int val) { return ((val >> 31) - (-val >> 31)); }
 
 float olive_signf(float val) { return (float)((val > 0.0f) - (val < 0.0f)); }
 
-float olive_rad(float deg) { return deg * PIf / 180.0f; }
+float olive_rad(float deg) { return deg * PI / 180.0f; }
 
-float olive_deg(float rad) { return rad * 180.0f / PIf; }
+float olive_deg(float rad) { return rad * 180.0f / PI; }
 
-void olive_make_rad(float *deg) { *deg = *deg * PIf / 180.0f; }
+void olive_make_rad(float *deg) { *deg = *deg * PI / 180.0f; }
 
-void olive_make_deg(float *rad) { *rad = *rad * 180.0f / PIf; }
+void olive_make_deg(float *rad) { *rad = *rad * 180.0f / PI; }
 
 float olive_pow2(float x) { return x * x; }
 

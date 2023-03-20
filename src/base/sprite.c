@@ -14,7 +14,8 @@ void olive_sprite_blend(Olive_Canvas oc, int x, int y, int w, int h,
 
 	Olive_Normalized_Rect nr = { 0 };
 	// Normalize rectangle to the nearest rectangle.
-	if (!olive_normalize_rect(x, y, w, h, oc.width, oc.height, &nr)) {
+	ivec2 pos = { x, y };
+	if (!olive_normalize_rect(pos, w, h, oc.width, oc.height, &nr)) {
 		return;
 }
 
@@ -47,7 +48,8 @@ void olive_sprite_copy(Olive_Canvas oc, int x, int y, int w, int h,
 
 	// TODO: consider introducing flip parameter instead of relying on negative
 	Olive_Normalized_Rect nr = { 0 };
-	if (!olive_normalize_rect(x, y, w, h, oc.width, oc.height, &nr)) {
+	ivec2 pos = { x, y };
+	if (!olive_normalize_rect(pos, w, h, oc.width, oc.height, &nr)) {
 		return;
 }
 
@@ -123,7 +125,8 @@ void olive_sprite_copy_bilinear(Olive_Canvas oc, int x, int y, int w, int h,
 }
 
 	Olive_Normalized_Rect nr = { 0 };
-	if (!olive_normalize_rect(x, y, w, h, oc.width, oc.height, &nr)) {
+	ivec2 pos = { x, y };
+	if (!olive_normalize_rect(pos, w, h, oc.width, oc.height, &nr)) {
 		return;
 }
 

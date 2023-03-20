@@ -9,9 +9,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void olive_rect(Olive_Canvas oc, int x, int y, int w, int h, uint32_t color) {
+void olive_rect(Olive_Canvas oc, ivec2 pos, int w, int h, uint32_t color) {
 	Olive_Normalized_Rect nr = { 0 };
-	if (!olive_normalize_rect(x, y, w, h, oc.width, oc.height, &nr)) {
+	if (!olive_normalize_rect(pos, w, h, oc.width, oc.height, &nr)) {
 		return;
 	}
 	for (int i = nr.start[0]; i <= nr.end[0]; ++i) {
@@ -21,7 +21,7 @@ void olive_rect(Olive_Canvas oc, int x, int y, int w, int h, uint32_t color) {
 	}
 }
 
-bool olive_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
+bool olive_normalize_rect(ivec2 pos, int w, int h, size_t canvas_width,
 		size_t canvas_height, Olive_Normalized_Rect *nr) {
 	if (w == 0) {
 		return false;
@@ -30,7 +30,6 @@ bool olive_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
 		return false;
 	}
 
-	ivec2 pos = { x, y };
 	olive_ivec2_copy(pos, nr->ostart);
 
 	nr->oend[0] = nr->ostart[0] + olive_sign(w) * (abs(w) - 1);
@@ -76,32 +75,30 @@ bool olive_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
 	return true;
 }
 
-void olive_frame(Olive_Canvas oc, int x, int y, int w, int h, size_t t,
-		uint32_t color) {
+void olive_frame(Olive_Canvas oc, ivec2 spos, ivec2 epos, size_t t, uint32_t color) {
 	if (t == 0) {
 		return;
 	}
 
-	int x1 = x;
-	int y1 = y;
-
-	int x2 = x1 + olive_sign(w) * (abs(w) - 1);
-	if (x1 > x2) {
-		olive_swap(&x1, &x2);
+	int x2 = spos[0] + olive_sign(epos[0]) * (abs(epos[0]) - 1);
+	if (spos[0] > x2) {
+		olive_swap(&spos[0], &x2);
 	}
-	int y2 = y1 + olive_sign(h) * (abs(h) - 1);
-	if (y1 > y2) {
-		olive_swap(&y1, &y2);
+	int y2 = spos[1] + olive_sign(epos[1]) * (abs(epos[1]) - 1);
+	if (spos[1] > y2) {
+		olive_swap(&spos[1], &y2);
 	}
 
-	olive_rect(oc, x1 - t / 2, y1 - t / 2, (x2 - x1 + 1) + t / 2 * 2, t,
-			color); // Top
-	olive_rect(oc, x1 - t / 2, y1 - t / 2, t, (y2 - y1 + 1) + t / 2 * 2,
-			color); // Left
-	olive_rect(oc, x1 - t / 2, y2 + t / 2, (x2 - x1 + 1) + t / 2 * 2, -t,
-			color); // Bottom
-	olive_rect(oc, x2 + t / 2, y1 - t / 2, -t, (y2 - y1 + 1) + t / 2 * 2,
-			color); // Right
+	ivec2 pos = {spos[0] - t / 2, spos[1] - t / 2};
+	olive_rect(oc, pos, (x2 - spos[0] + 1) + t / 2 * 2, t, color); // Top
+	olive_rect(oc, pos, t, (y2 - spos[1] + 1) + t / 2 * 2, color); // Left
+
+	pos[1] = y2 + t / 2;
+	olive_rect(oc, pos, (x2 - spos[0] + 1) + t / 2 * 2, -t, color); // Bottom
+
+	pos[0] = x2 + t / 2;
+	pos[1] = spos[1] - t / 2;
+	olive_rect(oc, pos, -t, (y2 - spos[1] + 1) + t / 2 * 2, color); // Right
 }
 
 void olive_ellipse(Olive_Canvas oc, int cx, int cy, int rx, int ry,
@@ -109,7 +106,8 @@ void olive_ellipse(Olive_Canvas oc, int cx, int cy, int rx, int ry,
 	Olive_Normalized_Rect nr = { 0 };
 	int rx1 = rx + olive_sign(rx);
 	int ry1 = ry + olive_sign(ry);
-	if (!olive_normalize_rect(cx - rx1, cy - ry1, 2 * rx1, 2 * ry1, oc.width,
+	ivec2 pos = { cx - rx1, cy - ry1 };
+	if (!olive_normalize_rect(pos, 2 * rx1, 2 * ry1, oc.width,
 				oc.height, &nr)) {
 		return;
 	}
@@ -127,10 +125,11 @@ void olive_ellipse(Olive_Canvas oc, int cx, int cy, int rx, int ry,
 	}
 }
 
-void olive_circle(Olive_Canvas oc, int cx, int cy, int r, uint32_t color) {
+void olive_circle(Olive_Canvas oc, ivec2 cpos, int r, uint32_t color) {
 	Olive_Normalized_Rect nr = { 0 };
 	int r1 = r + olive_sign(r);
-	if (!olive_normalize_rect(cx - r1, cy - r1, 2 * r1, 2 * r1, oc.width,
+	ivec2 pos = { cpos[0] - r1, cpos[1] - r1 };
+	if (!olive_normalize_rect(pos, 2 * r1, 2 * r1, oc.width,
 				oc.height, &nr)) {
 		return;
 	}
@@ -141,8 +140,8 @@ void olive_circle(Olive_Canvas oc, int cx, int cy, int r, uint32_t color) {
 			for (int sox = 0; sox < OLIVE_AA_RES; ++sox) {
 				for (int soy = 0; soy < OLIVE_AA_RES; ++soy) {
 					int res1 = (OLIVE_AA_RES + 1);
-					int dx = (x * res1 * 2 + 2 + sox * 2 - res1 * cx * 2 - res1);
-					int dy = (y * res1 * 2 + 2 + soy * 2 - res1 * cy * 2 - res1);
+					int dx = (x * res1 * 2 + 2 + sox * 2 - res1 * cpos[0] * 2 - res1);
+					int dy = (y * res1 * 2 + 2 + soy * 2 - res1 * cpos[1] * 2 - res1);
 					if (dx * dx + dy * dy <= res1 * res1 * r * r * 2 * 2) {
 						count += 1;
 					}

@@ -12,8 +12,8 @@ void olive_project_3d_2d(vec3 v3, vec2 dest) {
 	if (v3[2] < 0) {
 		v3[2] = -v3[2];
 }
-	if (v3[2] < 1e-6) {
-		v3[2] += 1e-6;
+	if (v3[2] < FLT_EPSILON) {
+		v3[2] += FLT_EPSILON;
 }
 
 	dest[0] = v3[0] / v3[2];

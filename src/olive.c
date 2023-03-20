@@ -1,4 +1,5 @@
 #include "olive/base/figure.h"
+#include "olive/types.h"
 #include "olive/utils/math.h"
 #include <math.h>
 #include <stdint.h>
@@ -8,7 +9,7 @@ void olive_text(Olive_Canvas oc, const char *text, int tx, int ty,
 	for (size_t i = 0; *text; ++i, ++text) {
 		int gx = tx + i * font.width * glyph_size;
 		int gy = ty;
-		const char *glyph =
+		const unsigned char *glyph =
 				&font.glyphs[(*text) * sizeof(char) * font.width * font.height];
 		for (int dy = 0; (size_t)dy < font.height; ++dy) {
 			for (int dx = 0; (size_t)dx < font.width; ++dx) {
@@ -16,7 +17,8 @@ void olive_text(Olive_Canvas oc, const char *text, int tx, int ty,
 				int py = gy + dy * glyph_size;
 				if (0 <= px && px < (int)oc.width && 0 <= py && py < (int)oc.height) {
 					if (glyph[dy * font.width + dx]) {
-						olive_rect(oc, px, py, glyph_size, glyph_size, color);
+						ivec2 pos = {px, py};
+						olive_rect(oc, pos, glyph_size, glyph_size, color);
 					}
 				}
 			}

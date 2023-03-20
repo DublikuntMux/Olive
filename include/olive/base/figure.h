@@ -10,18 +10,17 @@
 #define OLIVE_AA_RES 2
 #endif
 
-void olive_rect(Olive_Canvas oc, int x, int y, int w, int h, uint32_t color);
+void olive_rect(Olive_Canvas oc, ivec2 pos, int w, int h, uint32_t color);
 
-bool olive_normalize_rect(int x, int y, int w, int h, size_t canvas_width,
+bool olive_normalize_rect(ivec2 pos, int w, int h, size_t canvas_width,
 		size_t canvas_height, Olive_Normalized_Rect *nr);
 
-void olive_frame(Olive_Canvas oc, int x, int y, int w, int h, size_t t,
-		uint32_t color);
+void olive_frame(Olive_Canvas oc, ivec2 spos, ivec2 epos, size_t t, uint32_t color);
 
 void olive_ellipse(Olive_Canvas oc, int cx, int cy, int rx, int ry,
 		uint32_t color);
 
-void olive_circle(Olive_Canvas oc, int cx, int cy, int r, uint32_t color);
+void olive_circle(Olive_Canvas oc, ivec2 cpos, int r, uint32_t color);
 
 void olive_line(Olive_Canvas oc, int x1, int y1, int x2, int y2,
 		uint32_t color);

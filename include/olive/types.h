@@ -5,7 +5,6 @@
 #include <stdint.h>
 
 #define PI 3.1415926535897932384626433832795
-#define PIf ((float)PI)
 #define FLT_EPSILON 1e-5f
 
 #define OLIVE_PIXEL(oc, x, y) (oc).pixels[(y) * (oc).stride + (x)]
@@ -26,7 +25,7 @@ typedef __attribute((aligned(16))) vec4 mat4[4];
 
 typedef struct {
 	size_t width, height;
-	const char *glyphs;
+	const unsigned char *glyphs;
 } Olive_Font;
 
 typedef struct {

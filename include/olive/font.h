@@ -6,7 +6,7 @@
 #define OLIVE_DEFAULT_FONT_HEIGHT 6
 #define OLIVE_DEFAULT_FONT_WIDTH 6
 
-char olive_default_glyphs[128][OLIVE_DEFAULT_FONT_HEIGHT][OLIVE_DEFAULT_FONT_WIDTH] = {
+unsigned char olive_default_glyphs[128][OLIVE_DEFAULT_FONT_HEIGHT][OLIVE_DEFAULT_FONT_WIDTH] = {
 	['a'] = {
 			{ 0, 0, 0, 0, 0 },
 			{ 0, 1, 1, 0, 0 },

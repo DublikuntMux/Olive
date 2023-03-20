@@ -1,6 +1,4 @@
 #include "assets/tsodinCupLowPoly.h"
-#include "olive/math/vec2.h"
-#include "olive/math/vec3.h"
 #include "vc.c"
 #include <olive/olive.h>
 
@@ -24,7 +22,7 @@ Olive_Canvas vc_render(float dt) {
 	olive_fill(oc, BACKGROUND_COLOR);
 	for (size_t i = 0; i < WIDTH * HEIGHT; ++i) {
 		zbuffer[i] = 0;
-}
+	}
 
 	for (size_t i = 0; i < faces_count; ++i) {
 		int a = faces[i][0];
@@ -82,8 +80,9 @@ Olive_Canvas vc_render(float dt) {
 							if (z >= 1.0) {
 								z -= 1.0f;
 								uint32_t v = z * 255;
-								if (v > 255)
+								if (v > 255) {
 									v = 255;
+								}
 								olive_blend_color(&OLIVE_PIXEL(oc, x, y), (v << (3 * 8)));
 							}
 						}

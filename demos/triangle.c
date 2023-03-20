@@ -1,4 +1,5 @@
 #include "helpers/vc.c"
+#include "olive/types.h"
 #include <math.h>
 #include <olive/olive.h>
 
@@ -12,8 +13,7 @@
 
 static uint32_t pixels[WIDTH * HEIGHT];
 static float triangle_angle = 0;
-static float circle_x = WIDTH / 2.0f;
-static float circle_y = HEIGHT / 2.0f;
+static vec2 circle_pos = {WIDTH / 2.0f, HEIGHT / 2.0f};
 static float circle_dx = 100;
 static float circle_dy = 100;
 
@@ -47,21 +47,21 @@ Olive_Canvas vc_render(float dt) {
 
 	// Circle
 	{
-		float x = circle_x + circle_dx * dt;
+		float x = circle_pos[0] + circle_dx * dt;
 		if (x - CIRCLE_RADIUS < 0 || x + CIRCLE_RADIUS >= WIDTH) {
 			circle_dx *= -1;
 		} else {
-			circle_x = x;
+			circle_pos[0] = x;
 		}
 
-		float y = circle_y + circle_dy * dt;
+		float y = circle_pos[1] + circle_dy * dt;
 		if (y - CIRCLE_RADIUS < 0 || y + CIRCLE_RADIUS >= HEIGHT) {
 			circle_dy *= -1;
 		} else {
-			circle_y = y;
+			circle_pos[1] = y;
 		}
-
-		olive_circle(oc, circle_x, circle_y, CIRCLE_RADIUS, CIRCLE_COLOR);
+		ivec2 cpos = {circle_pos[0], circle_pos[1]};
+		olive_circle(oc, cpos, CIRCLE_RADIUS, CIRCLE_COLOR);
 	}
 
 	return oc;
