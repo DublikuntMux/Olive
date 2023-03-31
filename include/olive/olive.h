@@ -24,6 +24,7 @@
 #include "math/mat3.h"
 #include "math/mat4.h"
 
+#include "base/text.h"
 #include "base/canvas.h"
 #include "base/color.h"
 #include "base/figure.h"
@@ -32,9 +33,8 @@
 
 #include "font.h"
 
-void olive_text(Olive_Canvas oc, const char *text, int tx, int ty,
-		Olive_Font font, size_t glyph_size, uint32_t color);
 double olive_binomial_coeffs(int n, int i);
+
 void olive_bezier(Olive_Canvas oc, int degree, uint32_t color, int x1, int y1,
 		int cx1, int cy1, int cx2, int cy2, int x2, int y2);
 

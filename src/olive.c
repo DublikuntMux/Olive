@@ -4,28 +4,6 @@
 #include <math.h>
 #include <stdint.h>
 
-void olive_text(Olive_Canvas oc, const char *text, int tx, int ty,
-		Olive_Font font, size_t glyph_size, uint32_t color) {
-	for (size_t i = 0; *text; ++i, ++text) {
-		int gx = tx + i * font.width * glyph_size;
-		int gy = ty;
-		const unsigned char *glyph =
-				&font.glyphs[(*text) * sizeof(char) * font.width * font.height];
-		for (int dy = 0; (size_t)dy < font.height; ++dy) {
-			for (int dx = 0; (size_t)dx < font.width; ++dx) {
-				int px = gx + dx * glyph_size;
-				int py = gy + dy * glyph_size;
-				if (0 <= px && px < (int)oc.width && 0 <= py && py < (int)oc.height) {
-					if (glyph[dy * font.width + dx]) {
-						ivec2 pos = {px, py};
-						olive_rect(oc, pos, glyph_size, glyph_size, color);
-					}
-				}
-			}
-		}
-	}
-}
-
 double olive_binomial_coeffs(int n, int i) {
 	double result = 1;
 	for (int j = 1; j <= i; j++) {
