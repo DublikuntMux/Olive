@@ -248,7 +248,7 @@ elif env["target"] == "prepare":
 elif env["target"] == "native_sdl":
     for file in get_source("demos"):
         env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)), LIBPATH='build/libs',
-                        LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM -march=native')
+                        LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -DVC_PLATFORM=VC_SDL_PLATFORM -march=native')
 
 elif env["target"] == "linux_sdl":
     host_is_64_bit = sys.maxsize > 2**32
@@ -261,7 +261,7 @@ elif env["target"] == "linux_sdl":
 
     for file in get_source("demos"):
         env_app.Program(target='build/demos/' + file.replace('.c', '') + '.sdl', source=(os.path.join("demos", file)),
-                        LIBPATH='build/libs', LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_SDL_PLATFORM')
+                        LIBPATH='build/libs', LIBS=['m', 'SDL2', 'olive'], CCFLAGS='$CCFLAGS -DVC_PLATFORM=VC_SDL_PLATFORM')
 
 elif env["target"] == "windows_sdl":
     msvc_arch_aliases = {"x86_32": "x86", "arm32": "arm"}
@@ -277,7 +277,7 @@ elif env["target"] == "windows_sdl":
 elif env["target"] == "native_term":
     for file in get_source("demos"):
         env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)), LIBPATH='build/libs',
-                        LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600 -march=native')
+                        LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600 -march=native')
 
 elif env["target"] == "linux_term":
     host_is_64_bit = sys.maxsize > 2**32
@@ -290,7 +290,7 @@ elif env["target"] == "linux_term":
 
     for file in get_source("demos"):
         env_app.Program(target='build/demos/' + file.replace('.c', '') + '.term', source=(os.path.join("demos", file)),
-                        LIBPATH='build/libs', LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -fno-builtin -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600')
+                        LIBPATH='build/libs', LIBS=['m', 'olive'], CCFLAGS='$CCFLAGS -DVC_PLATFORM=VC_TERM_PLATFORM -D_XOPEN_SOURCE=600')
 
 elif env["target"] == "windows_term":
     msvc_arch_aliases = {"x86_32": "x86", "arm32": "arm"}
@@ -309,7 +309,7 @@ elif env["target"] == "web":
         WhereIs("emcc")) + "/tools/scons/site_scons/site_tools/emscripten"])
     for file in get_source("demos"):
         env_app.Program(target='build/demos/' + file.replace('.c', '') + '.wasm', source=(os.path.join("demos", file)), LIBPATH='build/libs', LIBS=[
-                        'm', 'SDL', 'olive'], LINKFLAGS='$LINKFLAGS -Wl,--no-entry -Wl,--export=vc_render -Wl,--export=__heap_base -sFILESYSTEM=0 -sUSE_SDL=2 -sMALLOC=emmalloc -sALLOW_MEMORY_GROWTH -sLEGACY_GL_EMULATION', CCFLAGS='$CCFLAGS -fno-builtin --closure=1 --no-standard-libraries -DVC_PLATFORM=VC_WASM_PLATFORM')
+                        'm', 'SDL', 'olive'], LINKFLAGS='$LINKFLAGS -Wl,--no-entry -Wl,--export=vc_render -Wl,--export=__heap_base -sFILESYSTEM=0 -sUSE_SDL=2 -sMALLOC=emmalloc -sALLOW_MEMORY_GROWTH -sLEGACY_GL_EMULATION', CCFLAGS='$CCFLAGS --closure=1 --no-standard-libraries -DVC_PLATFORM=VC_WASM_PLATFORM')
 
         if os.path.exists('build/demos/' + file.replace('.c', '') + '.wasm'):
             shutil.copyfile('build/demos/' + file.replace('.c', '') +

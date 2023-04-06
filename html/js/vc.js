@@ -21,6 +21,7 @@ const libm = {
 	"sqrtf": Math.sqrt,
 	"fminf": Math.min,
 	"floorf": Math.floor,
+	"fmaxf": Math.max,
 };
 
 let iota = 0;
